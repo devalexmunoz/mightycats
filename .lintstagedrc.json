@@ -1,0 +1,6 @@
+{
+  "*.+(js|vue)": ["eslint --fix --max-warnings=0", "prettier --write"],
+  "*.+(vue|scss)": ["stylelint --fix", "prettier --write"],
+  "*.+(json)": "prettier --write",
+  "*.php": "./vendor/bin/duster fix"
+}
