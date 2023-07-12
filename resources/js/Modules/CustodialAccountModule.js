@@ -28,7 +28,7 @@ const createCustodialAccount = async () => {
     CREATE_CUSTODIAL_ACCOUNT,
     (arg, t) => [arg(publicKey, t.String), arg('1.0', t.UFix64)],
     {
-      // TODO: Figure out the right limit
+      // TODO: Figure out the appropriate limit
       limit: 500,
       payer: adminAuthorization,
       proposer: adminAuthorization,
@@ -90,6 +90,7 @@ const storeCreatedWalletAddress = async (walletAddress) => {
     .put(route('onboarding.user-wallet'), { wallet_address: walletAddress })
     .then((response) => {
       if (response.data.success) {
+        // This ajax call updates user model properties, so we need to reflect those changes on the current authUser
         updateAuthUserProps({
           custodial_wallet_address: response.data.walletAddress,
         })
