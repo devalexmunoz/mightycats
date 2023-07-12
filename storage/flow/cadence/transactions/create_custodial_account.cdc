@@ -73,7 +73,7 @@ transaction(
                 .borrow()!
                 .deposit(
                     from: <-fundingProvider.withdraw(
-                        amount: initialFundingAmt
+                        amount: initialFundingAmount
                     )
                 )
         }
@@ -81,7 +81,7 @@ transaction(
         /* --- Set up DemoCats.Collection --- */
         //
         // create & save it to the account
-        custodialAccount.save(<-DemoCats.createEmptyCollection(), to: custodialAccount.CollectionStoragePath)
+        custodialAccount.save(<-DemoCats.createEmptyCollection(), to: DemoCats.CollectionStoragePath)
 
         // create a public capability for the collection
         custodialAccount.link<&DemoCats.Collection{NonFungibleToken.CollectionPublic, DemoCats.DemoCatsCollectionPublic, MetadataViews.ResolverCollection}>(DemoCats.CollectionPublicPath, target: DemoCats.CollectionStoragePath)
