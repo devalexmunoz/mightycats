@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./resources/js/*"],
+      "@storage/*": ["./storage/*"],
+      "@resources/*": ["./resources/*"],
+      "@vendor/*": ["./vendor/*"]
+    }
+  }
+}
