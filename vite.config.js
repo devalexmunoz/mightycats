@@ -36,7 +36,6 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@storage': path.resolve(__dirname, './storage'),
-        '@resources': path.resolve(__dirname, './resources'),
         '@vendor': path.resolve(__dirname, './vendor'),
       },
     },
