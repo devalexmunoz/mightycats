@@ -11,7 +11,10 @@
   },
   "plugins": ["vue"],
   "globals": {
-    "route": true
+    "route": true,
+    "axios": true,
+    "google": true,
+    "getViteEnv": true
   },
   "rules": {},
   "overrides": [

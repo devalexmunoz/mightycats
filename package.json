@@ -2,9 +2,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run routes:generate && vite",
+    "build": "npm run routes:generate && vite build",
     "prepare": "husky install",
+    "routes:generate": "php artisan ziggy:generate resources/js/routes.js",
     "lint": "npm run lint:php && npm run lint:js && npm run lint:css",
     "lint:php": "./vendor/bin/duster fix",
     "lint:js": "eslint resources/js/ --fix --max-warnings=0",
@@ -14,6 +15,9 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
+    "@inertiajs/vue3": "^1.0.9",
+    "@onflow/fcl": "^1.4.1",
+    "@vitejs/plugin-vue": "^4.2.3",
     "autoprefixer": "^10.4.14",
     "axios": "^1.1.2",
     "eslint": "^8.44.0",
@@ -25,11 +29,14 @@
     "postcss": "^8.4.25",
     "postcss-html": "^1.5.0",
     "prettier": "^3.0.0",
+    "sass": "^1.63.6",
     "stylelint": "^15.10.1",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-scss": "^10.0.0",
     "stylelint-config-standard-vue": "^1.0.0",
     "stylelint-order": "^6.0.3",
-    "vite": "^4.0.0"
+    "vite": "^4.0.0",
+    "vite-plugin-node-polyfills": "^0.9.0",
+    "vue": "^3.3.4"
   }
 }

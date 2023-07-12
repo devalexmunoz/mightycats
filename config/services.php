@@ -14,21 +14,24 @@ return [
     |
     */
 
-    'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
-        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
-        'scheme' => 'https',
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'application_credentials_path' => env('GOOGLE_APPLICATION_CREDENTIALS'),
     ],
 
-    'postmark' => [
-        'token' => env('POSTMARK_TOKEN'),
+    'cloud_kms' => [
+        'project' => env('CLOUD_KMS_PROJECT'),
+        'location' => env('CLOUD_KMS_LOCATION'),
+        'admin_key_ring' => env('CLOUD_KMS_ADMIN_KEY_RING'),
+        'admin_key' => env('CLOUD_KMS_ADMIN_KEY'),
+        'custodial_key_ring' => env('CLOUD_KMS_CUSTODIAL_KEY_RING'),
     ],
 
-    'ses' => [
-        'key' => env('AWS_ACCESS_KEY_ID'),
-        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    'stripe' => [
+        'secret_key' => env('STRIPE_SECRET_KEY'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'purchase_price_id' => env('STRIPE_PURCHASE_PRICE_ID'),
     ],
 
 ];
