@@ -2,8 +2,6 @@ import { withPrefix } from '@onflow/fcl'
 import { useFclModule } from '@/Modules/FclModule'
 import { getAuthUser, updateAuthUserProps } from '@/Utils/Auth'
 import { adminAuthorization } from '@/Utils/FlowAuthorizations'
-import CREATE_CUSTODIAL_ACCOUNT from '@resources/cadence/transactions/createCustodialAccount'
-import GET_CUSTODIAL_ACCOUNT_ADDRESS_IN_DIRECTORY from '@resources/cadence/scripts/getCustodialAccountAddressInDirectory'
 
 const fclModule = useFclModule()
 
@@ -25,7 +23,7 @@ const createCustodialAccount = async () => {
 
   // Execute transaction to create and fund new custodial account
   const result = await fclModule.executeTransaction(
-    CREATE_CUSTODIAL_ACCOUNT,
+    'create_custodial_account',
     (arg, t) => [arg(publicKey, t.String), arg('1.0', t.UFix64)],
     {
       // TODO: Figure out the appropriate limit
@@ -54,7 +52,7 @@ const getCustodialAccountAddress = async (publicKey) => {
   const adminAddress = getViteEnv('FLOW_ADMIN_ACCOUNT_ADDRESS')
 
   const result = await fclModule.runScript(
-    GET_CUSTODIAL_ACCOUNT_ADDRESS_IN_DIRECTORY,
+    'get_custodial_account_address_in_directory',
     (arg, t) => [
       arg(withPrefix(adminAddress), t.Address),
       arg(publicKey, t.String),

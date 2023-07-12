@@ -1,5 +1,9 @@
 import * as fcl from '@onflow/fcl'
 import { ref } from 'vue'
+import {
+  fetchCadenceScript,
+  fetchCadenceTransaction,
+} from '@/Utils/FetchCadenceFiles'
 import flowJSON from '@storage/flow/flow.json'
 
 const isInitialized = ref(false)
@@ -23,14 +27,16 @@ const init = async () => {
   isInitialized.value = true
 }
 
-const runScript = async (cadence, args, limit) => {
+const runScript = async (scriptFilename, args, limit) => {
   await init()
 
   let response = {}
+
+  const script = await fetchCadenceScript(scriptFilename)
   const result = await fcl
     .query({
-      cadence,
-      args,
+      cadence: script,
+      args: args,
       limit: limit || 50,
     })
     .catch((error) => {
@@ -44,14 +50,16 @@ const runScript = async (cadence, args, limit) => {
   return { result, success: true }
 }
 
-const executeTransaction = async (cadence, args, options) => {
+const executeTransaction = async (transactionFilename, args, options) => {
   await init()
 
   let response = {}
+
+  const transaction = await fetchCadenceTransaction(transactionFilename)
   const transactionId = await fcl
     .mutate({
-      cadence,
-      args,
+      cadence: transaction,
+      args: args,
       payer: options.payer || fcl.authz,
       proposer: options.proposer || fcl.authz,
       authorizations: options.authorizations || [fcl.authz],
@@ -67,18 +75,18 @@ const executeTransaction = async (cadence, args, options) => {
 
   response = { transactionId }
 
-  const transaction = await fcl
+  const transactionResult = await fcl
     .tx(transactionId)
     .onceSealed()
     .catch((error) => {
       response = { ...response, error: true, errorMessage: error }
     })
 
-  if (!transaction) {
+  if (!transactionResult) {
     return response
   }
 
-  return { ...response, transaction, success: true }
+  return { ...response, transactionResult, success: true }
 }
 
 export function useFclModule() {

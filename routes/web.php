@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\CustodialCryptoKeysController;
 use App\Http\Controllers\CustodialWalletController;
+use App\Http\Controllers\FetchCadenceFileController;
 use App\Http\Controllers\OnboardingStatusController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SignFlowMessageController;
@@ -71,6 +72,11 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+});
+
+Route::prefix('cadence')->name('cadence.')->middleware('ajax-only')->group(function () {
+    Route::get('/script', [FetchCadenceFileController::class, 'fetchScript'])->name('script');
+    Route::get('/transaction', [FetchCadenceFileController::class, 'fetchTransaction'])->name('transaction');
 });
 
 Route::post('webhooks/{driver}', [WebhooksController::class, 'store'])

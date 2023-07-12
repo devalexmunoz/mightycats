@@ -5,10 +5,6 @@ import {
   adminAuthorization,
   userAuthorization,
 } from '@/Utils/FlowAuthorizations'
-import MINT_DEMOCAT_TO_CUSTODIAL_ACCOUNT from '@resources/cadence/transactions/mintDemoCatToCustodialAccount'
-import GET_USER_DEMO_CATS_COUNT from '@resources/cadence/scripts/getUserDemoCatsCount'
-import GET_USER_LAST_MINTED_DEMO_CAT_ID from '@resources/cadence/scripts/getUserLastMintedDemoCatId'
-import GET_USER_DEMO_CAT_BY_ID from '@resources/cadence/scripts/getUserDemoCatById'
 
 const fclModule = useFclModule()
 
@@ -21,7 +17,7 @@ const mintDemoCatNftToUserAccount = async () => {
   // Only mint if account doesn't have an NFT in its collection
   if (count == 0) {
     const result = await fclModule.executeTransaction(
-      MINT_DEMOCAT_TO_CUSTODIAL_ACCOUNT,
+      'mint_demo_cat_to_custodial_account',
       (arg, t) => [arg('0', t.Int)],
       {
         payer: adminAuthorization,
@@ -44,7 +40,7 @@ const mintDemoCatNftToUserAccount = async () => {
  */
 const getUserDemoCatsNftCount = async () => {
   const result = await fclModule.runScript(
-    GET_USER_DEMO_CATS_COUNT,
+    'get_user_demo_cats_count',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
     ]
@@ -59,7 +55,7 @@ const getUserDemoCatsNftCount = async () => {
 
 const getUserLastMintedDemoCatNftId = async () => {
   const result = await fclModule.runScript(
-    GET_USER_LAST_MINTED_DEMO_CAT_ID,
+    'get_user_last_minted_demo_cat_id',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
     ]
@@ -74,7 +70,7 @@ const getUserLastMintedDemoCatNftId = async () => {
 
 const getUserDemoCatNftById = async (nftId) => {
   const result = await fclModule.runScript(
-    GET_USER_DEMO_CAT_BY_ID,
+    'get_user_demo_cat_by_id',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
       arg(nftId, t.UInt64),
