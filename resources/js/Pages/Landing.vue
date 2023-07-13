@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue'
   import { Head } from '@inertiajs/vue3'
-  import LoginModal from '../Components/LoginModal.vue'
+  import LoginModal from '@/Components/Onboarding/LoginModal.vue'
 
   const loginModal = ref(null)
 
