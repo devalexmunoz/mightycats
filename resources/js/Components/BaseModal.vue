@@ -1,14 +1,23 @@
 <script setup>
   import { ref } from 'vue'
+  const emit = defineEmits(['open', 'close'])
 
   const isOpen = ref(false)
   const open = () => {
     isOpen.value = true
+    emit('open')
   }
   const close = () => {
-    console.log('close base')
     isOpen.value = false
+    emit('close')
   }
+
+  defineProps({
+    backdropClose: {
+      type: Boolean,
+      default: true,
+    },
+  })
 
   defineExpose({
     open,
@@ -21,7 +30,11 @@
     <div v-show="isOpen" class="modal">
       <slot></slot>
     </div>
-    <div v-if="isOpen" class="modal-backdrop" @click="close"></div>
+    <div
+      v-if="isOpen"
+      class="modal-backdrop"
+      @click="backdropClose && close"
+    ></div>
   </Teleport>
 </template>
 
