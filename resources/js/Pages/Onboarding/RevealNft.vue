@@ -1,24 +1,12 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, watchEffect, onBeforeMount, onMounted } from 'vue'
   import { Head, Link } from '@inertiajs/vue3'
-  import { logout, getAuthUser } from '@/Utils/Auth'
-  import { useDemoCatsNftModule } from '@/Modules/DemoCatsNftModule'
+  import { logout } from '@/Utils/Auth'
+  import { getUserNftData } from '@/Utils/UserNftData'
+  import MightyCat from '@/Components/MightyCat.vue'
 
-  const demoCatsNftModule = useDemoCatsNftModule()
+  const nftDataFetched = ref(false)
 
-  const nftData = ref(null)
-
-  const fetchNftData = async () => {
-    const data = await demoCatsNftModule.getUserDemoCatNftById(
-      getAuthUser().minted_nft_id
-    )
-    if (!data) {
-      return
-    }
-
-    nftData.value = data
-    await updateOnboardingStatus()
-  }
   const updateOnboardingStatus = async () => {
     await axios
       .put(route('onboarding.status'), {
@@ -27,8 +15,21 @@
       .catch(() => {})
   }
 
-  onMounted(() => {
-    fetchNftData()
+  onBeforeMount(async () => {
+    // Make sure NFT data is fetched correctly so we can mark reveal as successful
+    getUserNftData().then((nftData) => {
+      if (nftData) {
+        nftDataFetched.value = true
+      }
+    })
+  })
+
+  onMounted(async () => {
+    watchEffect(() => {
+      if (nftDataFetched.value) {
+        updateOnboardingStatus()
+      }
+    })
   })
 </script>
 
@@ -43,14 +44,9 @@
     </nav>
 
     <h1>Onboarding</h1>
-    <p v-if="nftData">NFT Data: {{ nftData }}</p>
-    <Link :href="$route('home')" as="button" class="btn">Continue</Link>
+    <template v-if="nftDataFetched">
+      <MightyCat />
+      <Link :href="$route('home')" as="button" class="btn">Continue</Link>
+    </template>
   </div>
 </template>
-
-<style lang="scss" scoped>
-  p {
-    max-width: 600px;
-    text-align: center;
-  }
-</style>

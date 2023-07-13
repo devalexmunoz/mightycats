@@ -8,6 +8,7 @@ use App\Http\Controllers\FetchCadenceFileController;
 use App\Http\Controllers\OnboardingStatusController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SignFlowMessageController;
+use App\Http\Controllers\UpdateSessionController;
 use App\Http\Controllers\Webhooks\WebhooksController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -78,6 +79,8 @@ Route::prefix('cadence')->name('cadence.')->middleware('ajax-only')->group(funct
     Route::get('/script', [FetchCadenceFileController::class, 'fetchScript'])->name('script');
     Route::get('/transaction', [FetchCadenceFileController::class, 'fetchTransaction'])->name('transaction');
 });
+
+Route::put('/session', UpdateSessionController::class)->name('session.update');
 
 Route::post('webhooks/{driver}', [WebhooksController::class, 'store'])
     ->withoutMiddleware('csrf');

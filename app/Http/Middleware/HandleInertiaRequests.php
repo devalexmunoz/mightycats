@@ -37,6 +37,9 @@ class HandleInertiaRequests extends Middleware
             'auth.user' => fn () => $request->user()
                 ? $request->user()->only('id', 'custodial_wallet_address', 'minted_nft_id')
                 : null,
+            'user_nft' => fn () => $request->session()->has('user_nft')
+                ? $request->session()->get('user_nft')
+                : null,
         ]);
     }
 }
