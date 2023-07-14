@@ -1,12 +1,12 @@
 <script setup>
-  import { ref, onBeforeMount } from 'vue'
-  import { getUserNftData } from '@/Utils/UserNftData'
+  import { computedAsync } from '@vueuse/core'
+  import { useUserNftModule } from '@/Modules/UserNftModule'
 
-  const nftData = ref(null)
+  const userNftModule = useUserNftModule()
 
-  onBeforeMount(async () => {
-    nftData.value = await getUserNftData()
-  })
+  const nftData = computedAsync(async () => {
+    return await userNftModule.getUserNftData()
+  }, null)
 </script>
 
 <template>
