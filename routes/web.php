@@ -64,12 +64,22 @@ Route::middleware('auth')->group(function () {
         Route::put('/status', [OnboardingStatusController::class, 'update'])->name('status');
     });
 
+    Route::middleware('onboarding-status:'.User::ONBOARDING_STATUS_COMPLETED)->group(function () {
+        Route::get('/home', function () {
+            return Inertia::render('Home');
+        })->name('home');
+
+        Route::get('/training', function () {
+            return Inertia::render('Training/Selector');
+        })->name('training.selector');
+
+        Route::get('/training/activity', function () {
+            return Inertia::render('Training/Activity');
+        })->name('training.activity');
+    });
+
     Route::post('sign/flow/{signatureType}', SignFlowMessageController::class)
         ->whereIn('signatureType', ['admin', 'user'])->name('sign.flow');
-
-    Route::get('/home', function () {
-        return Inertia::render('Home');
-    })->middleware('onboarding-status:'.User::ONBOARDING_STATUS_COMPLETED)->name('home');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
