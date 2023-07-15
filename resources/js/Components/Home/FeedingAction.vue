@@ -3,6 +3,14 @@
   import { useFeedingModule } from '@/Modules/FeedingModule'
   import XpAwardedModal from '@/Components/XpAwardedModal.vue'
 
+  defineProps({
+    actionContainer: {
+      type: String,
+      required: false,
+      default: null,
+    },
+  })
+
   // Template $ref
   const resultsModal = ref(null)
 
@@ -24,32 +32,29 @@
   onBeforeMount(() => {
     feedingModule.resetStatus()
   })
-
-  defineProps({
-    container: {
-      type: String,
-      required: false,
-      default: null,
-    },
-  })
 </script>
 
 <template>
-  <template v-if="feedingActionStatus !== 'idle'">
-    <Teleport :disabled="!container" :to="container">
-      <div id="action-display">
-        <h3>Feeding</h3>
-        <p v-if="feedingActionStatus === 'feeding'">Nom nom nom...</p>
-        <p
-          v-if="
-            feedingActionStatus === 'done' || feedingActionStatus === 'results'
-          "
-        >
-          Your mighty cat is now full!
-        </p>
-      </div>
-    </Teleport>
-  </template>
+  <!--  Action  -->
+  <Teleport
+    v-if="feedingActionStatus !== 'idle'"
+    :disabled="!actionContainer"
+    :to="actionContainer"
+  >
+    <div id="action-display">
+      <h3>Feeding</h3>
+      <p v-if="feedingActionStatus === 'feeding'">Nom nom nom...</p>
+      <p
+        v-if="
+          feedingActionStatus === 'done' || feedingActionStatus === 'results'
+        "
+      >
+        Your mighty cat is now full!
+      </p>
+    </div>
+  </Teleport>
+
+  <!--  Results Modal  -->
   <XpAwardedModal ref="resultsModal" @close="feedingModule.resetStatus" />
 </template>
 
