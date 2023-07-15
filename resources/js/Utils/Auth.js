@@ -1,12 +1,12 @@
 import { router, usePage } from '@inertiajs/vue3'
 
-export function getAuthUser() {
+const getAuthUser = () => {
   const page = usePage()
 
   return page.props.auth.user
 }
 
-export function updateAuthUserProps(props) {
+const updateAuthUserProps = (props) => {
   const page = usePage()
 
   Object.keys(props).forEach((prop) => {
@@ -14,6 +14,8 @@ export function updateAuthUserProps(props) {
   })
 }
 
-export function logout() {
+const logout = () => {
   router.post(route('logout'))
 }
+
+export { getAuthUser, updateAuthUserProps, logout }
