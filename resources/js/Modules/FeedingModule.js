@@ -1,13 +1,15 @@
 import { ref } from 'vue'
 import { useMightyCatsGameModule } from '@/Modules/MightyCatsGameModule'
-import { useUserNftModule } from '@/Modules/UserNftModule'
 import {
   getCurrentTimestamp,
   convertSecondsToMilliseconds,
 } from '@/Utils/Date.js'
 
+const options = {
+  end_status_duration: 1500,
+}
+
 const mightyCatsGameModule = useMightyCatsGameModule()
-const userNftModule = useUserNftModule()
 
 const status = ref(null)
 const postFeedingStats = ref(null)
@@ -42,8 +44,7 @@ const endAction = async () => {
     return
   }
 
-  await userNftModule.refreshUserNftData()
-  showResults()
+  setTimeout(showResults, options.end_status_duration)
 }
 
 const showResults = () => {

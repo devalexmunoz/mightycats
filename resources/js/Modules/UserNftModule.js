@@ -25,7 +25,26 @@ const fetchUserNftData = async () => {
     return null
   }
 
-  return await mightyCatsNftModule.getUserMightyCatNftById(nftID)
+  const nftData = await mightyCatsNftModule.getUserMightyCatNftById(nftID)
+
+  return formatNftData(nftData)
+}
+
+const formatNftData = (nftData) => {
+  let formattedData = { ...nftData }
+  const numberProperties = [
+    'itemID',
+    'resourceID',
+    'level',
+    'levelProgress',
+    'xp',
+  ]
+
+  numberProperties.forEach((prop) => {
+    formattedData[prop] = parseInt(formattedData[prop])
+  })
+
+  return formattedData
 }
 
 const saveUserNftDataToSession = async (nftData) => {

@@ -2,6 +2,7 @@
   import { ref, onMounted, watchEffect } from 'vue'
   import { Head, router } from '@inertiajs/vue3'
   import { useTrainingModule } from '@/Modules/TrainingModule'
+  import { useUserNftModule } from '@/Modules/UserNftModule'
   import XpAwardedModal from '@/Components/XpAwardedModal.vue'
   import ErrorModal from '@/Components/ErrorModal.vue'
 
@@ -22,6 +23,9 @@
 
   const trainingModule = useTrainingModule()
   const activity = trainingModule.getSelectedActivity()
+
+  const userNftModule = useUserNftModule()
+
   const xpGained = ref(0)
 
   watchEffect(() => {
@@ -45,7 +49,15 @@
   }
 
   const onResultsModalClose = () => {
-    router.get(route('home'))
+    router.get(
+      route('home'),
+      {},
+      {
+        onFinish: () => {
+          userNftModule.refreshUserNftData()
+        },
+      }
+    )
   }
 
   const onErrorModalClose = () => {

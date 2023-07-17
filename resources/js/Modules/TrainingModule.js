@@ -1,14 +1,16 @@
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { useMightyCatsGameModule } from '@/Modules/MightyCatsGameModule'
-import { useUserNftModule } from '@/Modules/UserNftModule'
 import {
   convertSecondsToMilliseconds,
   getCurrentTimestamp,
 } from '@/Utils/Date.js'
 
+const options = {
+  end_status_duration: 1500,
+}
+
 const mightyCatsGameModule = useMightyCatsGameModule()
-const userNftModule = useUserNftModule()
 
 const availableActivities = ref([])
 const selectedActivity = ref(null)
@@ -52,8 +54,7 @@ const endActivity = async () => {
     return
   }
 
-  await userNftModule.refreshUserNftData()
-  showResults()
+  setTimeout(showResults, options.end_status_duration)
 }
 
 const showResults = () => {

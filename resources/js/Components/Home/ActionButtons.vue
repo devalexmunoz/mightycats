@@ -21,6 +21,7 @@
 <style lang="scss" scoped>
   #action-buttons {
     margin: 1rem;
+    margin-top: 5rem;
 
     :deep(.btn) {
       width: 10rem;

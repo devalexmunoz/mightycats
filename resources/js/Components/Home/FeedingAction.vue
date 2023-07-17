@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed, onBeforeMount, watchEffect } from 'vue'
   import { useFeedingModule } from '@/Modules/FeedingModule'
+  import { useUserNftModule } from '@/Modules/UserNftModule'
   import XpAwardedModal from '@/Components/XpAwardedModal.vue'
   import ErrorModal from '@/Components/ErrorModal.vue'
 
@@ -20,6 +21,8 @@
   const feedingActionStatus = computed(() => {
     return feedingModule.getStatus()
   })
+
+  const userNftModule = useUserNftModule()
 
   const xpGained = ref(0)
 
@@ -41,6 +44,15 @@
 
   const showErrorModal = () => {
     errorModal.value.open()
+  }
+
+  const onResultsModalClose = () => {
+    feedingModule.resetStatus()
+    userNftModule.refreshUserNftData()
+  }
+
+  const onErrorModalClose = () => {
+    feedingModule.resetStatus()
   }
 
   onBeforeMount(() => {
@@ -72,14 +84,14 @@
   <XpAwardedModal
     ref="resultsModal"
     :xp-gained="xpGained"
-    @close="feedingModule.resetStatus"
+    @close="onResultsModalClose"
   >
     <template #heading> Feeding complete! </template>
     <template #subheading> Your mighty cat is growing stronger </template>
   </XpAwardedModal>
 
   <!--  Error Modal  -->
-  <ErrorModal ref="errorModal" @close="feedingModule.resetStatus" />
+  <ErrorModal ref="errorModal" @close="onErrorModalClose" />
 </template>
 
 <style lang="scss" scoped>

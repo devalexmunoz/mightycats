@@ -1,6 +1,7 @@
 <script setup>
   import { Head } from '@inertiajs/vue3'
   import { logout } from '@/Utils/Auth'
+  import MightyCatInfoCard from '@/Components/Home/MightyCatInfoCard.vue'
   import MightyCat from '@/Components/MightyCat.vue'
   import FoodBowl from '@/Components/Items/FoodBowl.vue'
   import ActionButtons from '@/Components/Home/ActionButtons.vue'
@@ -17,6 +18,8 @@
         <a href="#" @click.prevent="logout">Log out</a>
       </div>
     </nav>
+
+    <MightyCatInfoCard />
 
     <h1>Home</h1>
 
