@@ -24,22 +24,30 @@ pub contract MightyCatsGame {
 
     pub struct Gameplay {
         pub var lastFedTimestamp: UFix64?
-        pub var lastActivityTimestamp: UFix64?
-        pub var activitiesRemaining: UInt8
+        pub var lastActivitiesTimestamps: [UFix64]?
 
         init(
             lastFedTimestamp: UFix64?,
-            lastActivityTimestamp: UFix64?,
-            activitiesRemaining: UInt8
+            lastActivitiesTimestamps: [UFix64]?,
         ) {
             self.lastFedTimestamp = lastFedTimestamp
-            self.lastActivityTimestamp = lastActivityTimestamp
-            self.activitiesRemaining = activitiesRemaining
+            self.lastActivitiesTimestamps = lastActivitiesTimestamps
         }
 
-         pub fun updateLastActivity(lastActivityTimestamp: UFix64?, activitiesRemaining: UInt8): Gameplay {
-            self.lastActivityTimestamp = lastActivityTimestamp
-            self.activitiesRemaining = activitiesRemaining
+         pub fun updateLastActivitiesTimestamps(lastActivityTimestamp: UFix64): Gameplay {
+            let maxLength = Int(MightyCatsGame.activitiesPerCooldown)
+
+            if(self.lastActivitiesTimestamps == nil){
+                self.lastActivitiesTimestamps = [lastActivityTimestamp]
+            }else{
+                // TOFIX: Condition is not working?
+                if(self.lastActivitiesTimestamps?.length == maxLength){
+                   self.lastActivitiesTimestamps?.removeLast()
+                }
+
+                self.lastActivitiesTimestamps?.insert(at: 0, lastActivityTimestamp)
+            }
+
             return self
         }
 
@@ -47,8 +55,6 @@ pub contract MightyCatsGame {
             self.lastFedTimestamp = lastFedTimestamp
             return self
         }
-
-
     }
 
     pub struct Activity {
@@ -89,21 +95,19 @@ pub contract MightyCatsGame {
         pub fun createUserGameplay(user: Address) {
             var userGameplay = Gameplay(
                 lastFedTimestamp: nil,
-                lastActivityTimestamp: nil,
-                activitiesRemaining: MightyCatsGame.activitiesPerCooldown
+                lastActivitiesTimestamps: nil,
             )
 
             MightyCatsGame.usersGameplay[user] = userGameplay
         }
 
-        pub fun updateUserGameplayLastActivity(user: Address, lastActivityTimestamp: UFix64?, activitiesRemaining: UInt8)
+        pub fun updateUserGameplayLastActivitiesTimestamps(user: Address, lastActivityTimestamp: UFix64)
         {
             var userGameplay = MightyCatsGame.usersGameplay[user]!
 
-            userGameplay.updateLastActivity(lastActivityTimestamp: lastActivityTimestamp, activitiesRemaining: activitiesRemaining)
+            userGameplay.updateLastActivitiesTimestamps(lastActivityTimestamp: lastActivityTimestamp)
 
             MightyCatsGame.usersGameplay.insert(key:user, userGameplay)
-
         }
 
         pub fun updateUserGameplayLastFedTimestamp(user: Address, lastFedTimestamp: UFix64?) {
@@ -122,7 +126,7 @@ pub contract MightyCatsGame {
         self.usersGameplay = {}
 
         self.activitiesPerCooldown = 3
-        self.activitiesCooldown = 300.0 // 86400.0 // 24 hours
+        self.activitiesCooldown = 60.0 // 86400.0 // 24 hours
         self.feedingCooldown = 60.0 // 14400.0 // 4 hours
 
         self.feedingXp = 50

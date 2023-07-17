@@ -3,19 +3,19 @@
     "MightyCat": {
       "source": "./cadence/contracts/MightyCat.cdc",
       "aliases": {
-        "testnet": "0x4653f80eee03b7ac"
+        "testnet": "0xaaf7be86aa51ba7d"
       }
     },
     "MightyCatsGame": {
       "source": "./cadence/contracts/MightyCatsGame.cdc",
       "aliases": {
-        "testnet": "0x4653f80eee03b7ac"
+        "testnet": "0xaaf7be86aa51ba7d"
       }
     },
     "CustodialAccountDirectory": {
       "source": "./cadence/contracts/CustodialAccountDirectory.cdc",
       "aliases": {
-        "testnet": "0x4653f80eee03b7ac"
+        "testnet": "0xaaf7be86aa51ba7d"
       }
     },
     "FlowToken": {
