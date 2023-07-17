@@ -63,7 +63,7 @@ const executeTransaction = async (transactionFilename, args, options) => {
       payer: options.payer || fcl.authz,
       proposer: options.proposer || fcl.authz,
       authorizations: options.authorizations || [fcl.authz],
-      limit: options.limit || 50,
+      limit: options.limit || 100,
     })
     .catch((error) => {
       response = { error: true, errorMessage: error }
