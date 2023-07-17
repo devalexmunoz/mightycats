@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onBeforeMount, watchEffect } from 'vue'
   import { Head } from '@inertiajs/vue3'
   import { useTrainingModule } from '@/Modules/TrainingModule'
 
@@ -10,16 +10,28 @@
   }
 
   const trainingModule = useTrainingModule()
-  const availableActivities = trainingModule.getAvailableActivities()
-  const selectedActivity = trainingModule.selectRandomActivity()
-  const selectedActivityText = ref(availableActivities[0])
+  const availableActivities = ref([])
+  const selectedActivity = ref(null)
+  const selectedActivityText = ref('')
+
+  watchEffect(() => {
+    if (selectedActivity.value) {
+      startRandomSelectionAnimation()
+      setTimeout(stopRandomSelectionAnimation, options.animationDuration)
+      setTimeout(
+        trainingModule.goToSelectedActivity,
+        options.waitAfterAnimation
+      )
+    }
+  })
 
   let animationIntervalRef = null
-  let animationActivityIndex = 1
+  let animationActivityIndex = 0
   const randomSelectionAnimation = () => {
-    selectedActivityText.value = availableActivities[animationActivityIndex]
+    selectedActivityText.value =
+      availableActivities.value[animationActivityIndex].name
     animationActivityIndex++
-    if (animationActivityIndex >= availableActivities.length) {
+    if (animationActivityIndex >= availableActivities.value.length) {
       animationActivityIndex = 0
     }
   }
@@ -32,13 +44,14 @@
   }
   const stopRandomSelectionAnimation = () => {
     clearInterval(animationIntervalRef)
-    selectedActivityText.value = selectedActivity
+    selectedActivityText.value = selectedActivity.value.name
   }
 
-  onMounted(() => {
-    startRandomSelectionAnimation()
-    setTimeout(stopRandomSelectionAnimation, options.animationDuration)
-    setTimeout(trainingModule.goToSelectedActivity, options.waitAfterAnimation)
+  onBeforeMount(async () => {
+    availableActivities.value = await trainingModule.getAvailableActivities()
+    selectedActivity.value = await trainingModule.selectRandomActivity(
+      availableActivities.value
+    )
   })
 </script>
 
@@ -46,7 +59,9 @@
   <Head title="Training selector" />
   <div class="container">
     <h1>Training Selector</h1>
-    <p>Today's training session will be:</p>
-    <h3 v-text="selectedActivityText"></h3>
+    <template v-if="selectedActivity">
+      <p>Today's training session will be:</p>
+      <h3 v-text="selectedActivityText"></h3>
+    </template>
   </div>
 </template>

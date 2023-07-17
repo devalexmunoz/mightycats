@@ -1,25 +1,20 @@
 <script setup>
   import { computed } from 'vue'
   import { useFeedingModule } from '@/Modules/FeedingModule'
-  import { useTrainingModule } from '@/Modules/TrainingModule'
   import FeedingActionButton from '@/Components/Home/FeedingActionButton.vue'
+  import TrainingActionButton from '@/Components/Home/TrainingActionButton.vue'
 
   const feedingModule = useFeedingModule()
-  const trainingModule = useTrainingModule()
 
   const showActionButtons = computed(() => {
     return feedingModule.getStatus() === 'idle'
   })
-
-  const train = () => {
-    trainingModule.confirmIntent()
-  }
 </script>
 
 <template>
   <div v-if="showActionButtons" id="action-buttons">
     <FeedingActionButton />
-    <button class="btn" @click="train">Training</button>
+    <TrainingActionButton />
   </div>
 </template>
 

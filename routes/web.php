@@ -8,6 +8,7 @@ use App\Http\Controllers\CustodialWalletController;
 use App\Http\Controllers\FetchCadenceFileController;
 use App\Http\Controllers\OnboardingStatusController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RandomPickController;
 use App\Http\Controllers\SignFlowMessageController;
 use App\Http\Controllers\UpdateSessionController;
 use App\Http\Controllers\Webhooks\WebhooksController;
@@ -92,6 +93,9 @@ Route::prefix('cadence')->name('cadence.')->middleware('ajax-only')->group(funct
     Route::get('/script', [FetchCadenceFileController::class, 'fetchScript'])->name('script');
     Route::get('/transaction', [FetchCadenceFileController::class, 'fetchTransaction'])->name('transaction');
 });
+
+Route::post('random-pick', RandomPickController::class)
+    ->middleware('ajax-only')->name('random-pick');
 
 Route::put('/session', UpdateSessionController::class)->name('session.update');
 

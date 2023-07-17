@@ -1,10 +1,19 @@
 <script setup>
   import { ref } from 'vue'
+  import { useTrainingModule } from '@/Modules/TrainingModule'
+  import { getCurrentTimestamp } from '@/Utils/Date'
+  import VueCountdown from '@chenfengyuan/vue-countdown'
   import BaseModal from '@/Components/BaseModal.vue'
+
   const emit = defineEmits(['confirm', 'cancel'])
 
   // TODO: Find a way to automatically proxy BaseModal methods
   const modal = ref(null)
+
+  const trainingModule = useTrainingModule()
+
+  // TODO: Find a better way to manage reactive cooldown status
+  const cooldownStatus = trainingModule.cooldownStatus
 
   const open = () => {
     modal.value.open()
@@ -18,6 +27,20 @@
   }
   const confirm = () => {
     emit('confirm')
+  }
+
+  const getTimerInput = () => {
+    return cooldownStatus.value.refreshTimestamp - getCurrentTimestamp()
+  }
+
+  const transformTimerSlots = (props) => {
+    const formattedProps = {}
+
+    Object.entries(props).forEach(([key, value]) => {
+      formattedProps[key] = value < 10 ? `0${value}` : String(value)
+    })
+
+    return formattedProps
   }
 
   defineExpose({
@@ -35,7 +58,29 @@
         session
       </p>
     </div>
-    <div class="modal-body">Training points: 3/3</div>
+    <div v-if="cooldownStatus" class="modal-body">
+      Training points: {{ cooldownStatus.activitiesRemaining }}/{{
+        cooldownStatus.activitiesPerCooldown
+      }}
+      <div>
+        <template
+          v-if="
+            cooldownStatus.activitiesRemaining ===
+            cooldownStatus.activitiesPerCooldown
+          "
+        >
+          You have full training points
+        </template>
+        <VueCountdown
+          v-else
+          v-slot="{ hours, minutes, seconds }"
+          :time="getTimerInput()"
+          :transform="transformTimerSlots"
+        >
+          Next point in {{ hours }}:{{ minutes }}:{{ seconds }}
+        </VueCountdown>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn" @click="cancel">Cancel</button>
       <button class="btn" @click="confirm">Train</button>
