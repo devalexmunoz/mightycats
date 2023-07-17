@@ -1,7 +1,7 @@
 import { withPrefix } from '@onflow/fcl'
 import { useFclModule } from '@/Modules/FclModule'
 import { getAuthUser } from '@/Utils/Auth'
-import { adminAuthorization } from '@/Utils/FlowAuthorizations.js'
+import { adminAuthorization } from '@/Utils/FlowAuthorizations'
 
 const fclModule = useFclModule()
 

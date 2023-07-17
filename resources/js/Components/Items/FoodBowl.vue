@@ -1,6 +1,6 @@
 <script setup>
   import { computed } from 'vue'
-  import { useFeedingModule } from '@/Modules/FeedingModule.js'
+  import { useFeedingModule } from '@/Modules/FeedingModule'
 
   const feedingModule = useFeedingModule()
 

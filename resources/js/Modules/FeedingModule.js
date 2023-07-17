@@ -1,9 +1,6 @@
 import { ref } from 'vue'
 import { useMightyCatsGameModule } from '@/Modules/MightyCatsGameModule'
-import {
-  getCurrentTimestamp,
-  convertSecondsToMilliseconds,
-} from '@/Utils/Date.js'
+import { getCurrentTimestamp, convertSecondsToMilliseconds } from '@/Utils/Date'
 
 const options = {
   end_status_duration: 1500,

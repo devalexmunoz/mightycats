@@ -1,10 +1,7 @@
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { useMightyCatsGameModule } from '@/Modules/MightyCatsGameModule'
-import {
-  convertSecondsToMilliseconds,
-  getCurrentTimestamp,
-} from '@/Utils/Date.js'
+import { convertSecondsToMilliseconds, getCurrentTimestamp } from '@/Utils/Date'
 
 const options = {
   end_status_duration: 1500,
