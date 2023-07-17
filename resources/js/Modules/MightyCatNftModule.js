@@ -17,7 +17,7 @@ const mintMightyCatNftToUserAccount = async (nftProps) => {
   // Only mint if account doesn't have an NFT in its collection
   if (count == 0) {
     const result = await fclModule.executeTransaction(
-      'mint_mighty_cat_to_custodial_account',
+      'onboarding/mint_mighty_cat_to_custodial_account',
       (arg, t) => [
         arg(nftProps.version, t.UInt64),
         arg(nftProps.nickname, t.String),
@@ -45,7 +45,7 @@ const mintMightyCatNftToUserAccount = async (nftProps) => {
  */
 const getUserMightyCatNftCount = async () => {
   const result = await fclModule.runScript(
-    'get_user_mighty_cat_count',
+    'onboarding/get_user_mighty_cat_count',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
     ]
@@ -60,7 +60,7 @@ const getUserMightyCatNftCount = async () => {
 
 const getUserLastMintedMightyCatNftId = async () => {
   const result = await fclModule.runScript(
-    'get_user_last_minted_mighty_cat_id',
+    'onboarding/get_user_last_minted_mighty_cat_id',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
     ]

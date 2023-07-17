@@ -23,7 +23,7 @@ const createCustodialAccount = async () => {
 
   // Execute transaction to create and fund new custodial account
   const result = await fclModule.executeTransaction(
-    'create_custodial_account',
+    'onboarding/create_custodial_account',
     (arg, t) => [arg(publicKey, t.String), arg('1.0', t.UFix64)],
     {
       // TODO: Figure out the appropriate limit
@@ -52,7 +52,7 @@ const getCustodialAccountAddress = async (publicKey) => {
   const adminAddress = getViteEnv('FLOW_ADMIN_ACCOUNT_ADDRESS')
 
   const result = await fclModule.runScript(
-    'get_custodial_account_address_in_directory',
+    'onboarding/get_custodial_account_address_in_directory',
     (arg, t) => [
       arg(withPrefix(adminAddress), t.Address),
       arg(publicKey, t.String),
