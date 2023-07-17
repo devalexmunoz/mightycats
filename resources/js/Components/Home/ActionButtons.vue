@@ -2,6 +2,7 @@
   import { computed } from 'vue'
   import { useFeedingModule } from '@/Modules/FeedingModule'
   import { useTrainingModule } from '@/Modules/TrainingModule'
+  import FeedingActionButton from '@/Components/Home/FeedingActionButton.vue'
 
   const feedingModule = useFeedingModule()
   const trainingModule = useTrainingModule()
@@ -10,19 +11,14 @@
     return feedingModule.getStatus() === 'idle'
   })
 
-  const feed = () => {
-    feedingModule.startAction()
-  }
-
   const train = () => {
     trainingModule.confirmIntent()
   }
 </script>
 
 <template>
-  <!-- Action Buttons are teleported here -->
   <div v-if="showActionButtons" id="action-buttons">
-    <button class="btn" @click="feed">Feed</button>
+    <FeedingActionButton />
     <button class="btn" @click="train">Training</button>
   </div>
 </template>
@@ -31,7 +27,7 @@
   #action-buttons {
     margin: 1rem;
 
-    .btn {
+    :deep(.btn) {
       width: 10rem;
       margin: 0 0.5rem;
     }

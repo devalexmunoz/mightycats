@@ -2,6 +2,7 @@
   import { ref, computed, onBeforeMount, watchEffect } from 'vue'
   import { useFeedingModule } from '@/Modules/FeedingModule'
   import XpAwardedModal from '@/Components/XpAwardedModal.vue'
+  import ErrorModal from '@/Components/ErrorModal.vue'
 
   defineProps({
     actionContainer: {
@@ -13,20 +14,33 @@
 
   // Template $ref
   const resultsModal = ref(null)
+  const errorModal = ref(null)
 
   const feedingModule = useFeedingModule()
   const feedingActionStatus = computed(() => {
     return feedingModule.getStatus()
   })
 
+  const xpGained = ref(0)
+
   watchEffect(() => {
     if (feedingModule.getStatus() === 'results') {
       showResultsModal()
     }
+
+    if (feedingModule.getStatus() === 'error') {
+      showErrorModal()
+    }
   })
 
   const showResultsModal = () => {
+    const stats = feedingModule.getPostFeedingStats()
+    xpGained.value = parseInt(stats.xp_gained)
     resultsModal.value.open()
+  }
+
+  const showErrorModal = () => {
+    errorModal.value.open()
   }
 
   onBeforeMount(() => {
@@ -55,7 +69,17 @@
   </Teleport>
 
   <!--  Results Modal  -->
-  <XpAwardedModal ref="resultsModal" @close="feedingModule.resetStatus" />
+  <XpAwardedModal
+    ref="resultsModal"
+    :xp-gained="xpGained"
+    @close="feedingModule.resetStatus"
+  >
+    <template #heading> Feeding complete! </template>
+    <template #subheading> Your mighty cat is growing stronger </template>
+  </XpAwardedModal>
+
+  <!--  Error Modal  -->
+  <ErrorModal ref="errorModal" @close="feedingModule.resetStatus" />
 </template>
 
 <style lang="scss" scoped>

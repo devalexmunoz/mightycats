@@ -2,13 +2,6 @@
   import { ref } from 'vue'
   import BaseModal from '@/Components/BaseModal.vue'
 
-  defineProps({
-    xpGained: {
-      type: Number,
-      required: true,
-    },
-  })
-
   // TODO: Find a way to automatically proxy BaseModal methods
   const modal = ref(null)
 
@@ -28,13 +21,10 @@
 <template>
   <BaseModal ref="modal" :backdrop-close="false">
     <div class="modal-title">
-      <h3><slot name="heading"></slot></h3>
-      <p><slot name="subheading"></slot></p>
+      <h3>Uh oh!</h3>
     </div>
     <div class="modal-body">
-      Your mighty cat gained
-      <span class="points-awarded">{{ xpGained }}</span>
-      Mighty Points
+      There was an error connecting to the game server.
     </div>
     <div class="modal-action">
       <button class="btn" @click="close">Ok</button>
@@ -48,19 +38,9 @@
     text-align: center;
   }
 
-  .modal-title {
-    p {
-      margin-bottom: 0;
-    }
-  }
-
   .modal-body {
     padding: 3rem 0;
     margin: 1rem 0;
-
-    .points-awarded {
-      display: block;
-    }
   }
 
   .modal-action {
