@@ -10,7 +10,7 @@ class ValidSessionData implements ValidationRule
     protected $allowedSessionKeys = [
         'user_nft' => [
             'type' => 'array',
-            'allowed_array_keys' => ['name', 'description', 'thumbnail', 'itemID', 'resourceID', 'owner', 'component'],
+            'allowed_array_keys' => ['version', 'nickname', 'gender', 'about', 'xp', 'level', 'levelProgress', 'thumbnail', 'itemID', 'resourceID', 'owner'],
         ],
     ];
 

@@ -1,12 +1,12 @@
 <script setup>
   import { ref, onMounted } from 'vue'
-  import { Head, router } from '@inertiajs/vue3'
+  import { Head, router, usePage } from '@inertiajs/vue3'
   import { getAuthUser, updateAuthUserProps } from '@/Utils/Auth'
-  import { useDemoCatsNftModule } from '@/Modules/DemoCatsNftModule'
+  import { useMightyCatNftModule } from '@/Modules/MightyCatNftModule'
   import { useCustodialAccountModule } from '@/Modules/CustodialAccountModule'
 
   const custodialAccountModule = useCustodialAccountModule()
-  const demoCatsNftModule = useDemoCatsNftModule()
+  const mightyCatsNftModule = useMightyCatNftModule()
 
   const status = ref(null)
 
@@ -20,9 +20,17 @@
   }
 
   const mintNft = async () => {
+    const nftProps = usePage().props.nftProps
+    if (!nftProps) {
+      status.value = 'error'
+      return
+    }
+
     status.value = 'minting-nft'
 
-    const mintedNftId = await demoCatsNftModule.mintDemoCatNftToUserAccount()
+    const mintedNftId = await mightyCatsNftModule.mintMightyCatNftToUserAccount(
+      nftProps
+    )
 
     if (!mintedNftId) {
       status.value = 'error'

@@ -1,6 +1,6 @@
 import "CustodialAccountDirectory"
 import "NonFungibleToken"
-import "DemoCats"
+import "MightyCat"
 import "MetadataViews"
 import "FungibleToken"
 import "FlowToken"
@@ -8,7 +8,7 @@ import "FlowToken"
 /// This transaction creates a custodial account from the given public key with the admin account as the
 /// account's payer, it then stores the reference to the new account address in the admin's AccountDirectory and
 /// additionally funds the new account with the specified amount of Flow from the admin's account.
-/// The custodial account is then configured with an empty DemoCats Collection
+/// The custodial account is then configured with an empty MightyCat Collection
 ///
 transaction(
     publicKey: String,
@@ -78,12 +78,12 @@ transaction(
                 )
         }
 
-        /* --- Set up DemoCats.Collection --- */
+        /* --- Set up MightyCat.Collection --- */
         //
         // create & save it to the account
-        custodialAccount.save(<-DemoCats.createEmptyCollection(), to: DemoCats.CollectionStoragePath)
+        custodialAccount.save(<-MightyCat.createEmptyCollection(), to: MightyCat.CollectionStoragePath)
 
         // create a public capability for the collection
-        custodialAccount.link<&DemoCats.Collection{NonFungibleToken.CollectionPublic, DemoCats.DemoCatsCollectionPublic, MetadataViews.ResolverCollection}>(DemoCats.CollectionPublicPath, target: DemoCats.CollectionStoragePath)
+        custodialAccount.link<&MightyCat.Collection{NonFungibleToken.CollectionPublic, MightyCat.MightyCatCollectionPublic, MetadataViews.ResolverCollection}>(MightyCat.CollectionPublicPath, target: MightyCat.CollectionStoragePath)
     }
 }

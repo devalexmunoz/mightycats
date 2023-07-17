@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { getAuthUser } from '@/Utils/Auth'
-import { useDemoCatsNftModule } from '@/Modules/DemoCatsNftModule'
+import { useMightyCatNftModule } from '@/Modules/MightyCatNftModule'
 
-const demoCatsNftModule = useDemoCatsNftModule()
+const mightyCatsNftModule = useMightyCatNftModule()
 
 let initialized = false
 const userNftData = ref(null)
@@ -25,7 +25,7 @@ const fetchUserNftData = async () => {
     return null
   }
 
-  return await demoCatsNftModule.getUserDemoCatNftById(nftID)
+  return await mightyCatsNftModule.getUserMightyCatNftById(nftID)
 }
 
 const saveUserNftDataToSession = async (nftData) => {

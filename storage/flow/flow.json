@@ -1,15 +1,15 @@
 {
   "contracts": {
-    "DemoCats": {
-      "source": "./cadence/contracts/DemoCats.cdc",
+    "MightyCat": {
+      "source": "./cadence/contracts/MightyCat.cdc",
       "aliases": {
-        "testnet": "0x35586fd1020343a6"
+        "testnet": "0x4653f80eee03b7ac"
       }
     },
     "CustodialAccountDirectory": {
       "source": "./cadence/contracts/CustodialAccountDirectory.cdc",
       "aliases": {
-        "testnet": "0x35586fd1020343a6"
+        "testnet": "0x4653f80eee03b7ac"
       }
     },
     "FlowToken": {
@@ -58,7 +58,7 @@
   "accounts": {},
   "deployments": {
     "testnet": {
-      "admin-account": ["DemoCats", "CustodialAccountDirectory"]
+      "admin-account": ["MightyCat", "CustodialAccountDirectory"]
     }
   }
 }

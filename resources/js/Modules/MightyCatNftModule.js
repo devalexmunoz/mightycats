@@ -11,14 +11,19 @@ const fclModule = useFclModule()
 /*
  * TRANSACTIONS
  */
-const mintDemoCatNftToUserAccount = async () => {
-  const count = await getUserDemoCatsNftCount()
+const mintMightyCatNftToUserAccount = async (nftProps) => {
+  const count = await getUserMightyCatNftCount()
 
   // Only mint if account doesn't have an NFT in its collection
   if (count == 0) {
     const result = await fclModule.executeTransaction(
-      'mint_demo_cat_to_custodial_account',
-      (arg, t) => [arg('0', t.Int)],
+      'mint_mighty_cat_to_custodial_account',
+      (arg, t) => [
+        arg(nftProps.version, t.UInt64),
+        arg(nftProps.nickname, t.String),
+        arg(nftProps.gender, t.String),
+        arg(nftProps.about, t.String),
+      ],
       {
         payer: adminAuthorization,
         proposer: adminAuthorization,
@@ -31,16 +36,16 @@ const mintDemoCatNftToUserAccount = async () => {
     }
   }
 
-  const demoCatNftId = await getUserLastMintedDemoCatNftId()
-  return demoCatNftId
+  const mightyCatNftId = await getUserLastMintedMightyCatNftId()
+  return mightyCatNftId
 }
 
 /*
  * SCRIPTS
  */
-const getUserDemoCatsNftCount = async () => {
+const getUserMightyCatNftCount = async () => {
   const result = await fclModule.runScript(
-    'get_user_demo_cats_count',
+    'get_user_mighty_cat_count',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
     ]
@@ -53,9 +58,9 @@ const getUserDemoCatsNftCount = async () => {
   return result.result
 }
 
-const getUserLastMintedDemoCatNftId = async () => {
+const getUserLastMintedMightyCatNftId = async () => {
   const result = await fclModule.runScript(
-    'get_user_last_minted_demo_cat_id',
+    'get_user_last_minted_mighty_cat_id',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
     ]
@@ -68,9 +73,9 @@ const getUserLastMintedDemoCatNftId = async () => {
   return result.result
 }
 
-const getUserDemoCatNftById = async (nftId) => {
+const getUserMightyCatNftById = async (nftId) => {
   const result = await fclModule.runScript(
-    'get_user_demo_cat_by_id',
+    'get_user_mighty_cat_by_id',
     (arg, t) => [
       arg(withPrefix(getAuthUser().custodial_wallet_address), t.Address),
       arg(nftId, t.UInt64),
@@ -84,9 +89,9 @@ const getUserDemoCatNftById = async (nftId) => {
   return result.result
 }
 
-export function useDemoCatsNftModule() {
+export function useMightyCatNftModule() {
   return {
-    mintDemoCatNftToUserAccount,
-    getUserDemoCatNftById,
+    mintMightyCatNftToUserAccount,
+    getUserMightyCatNftById,
   }
 }

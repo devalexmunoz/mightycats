@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\MightyCatNftHelper;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\CustodialCryptoKeysController;
@@ -49,7 +50,9 @@ Route::middleware('auth')->group(function () {
             ->middleware('signed')->name('purchase');
 
         Route::get('/mint', function () {
-            return Inertia::render('Onboarding/MintNft');
+            return Inertia::render('Onboarding/MintNft', [
+                'nftProps' => MightyCatNftHelper::getRandomVersion(),
+            ]);
         })->middleware('onboarding-status:'.User::ONBOARDING_STATUS_PURCHASED)->name('mint');
 
         Route::post('/crypto-keys', [CustodialCryptoKeysController::class, 'store'])
