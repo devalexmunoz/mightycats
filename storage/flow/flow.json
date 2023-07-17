@@ -6,6 +6,12 @@
         "testnet": "0x4653f80eee03b7ac"
       }
     },
+    "MightyCatsGame": {
+      "source": "./cadence/contracts/MightyCatsGame.cdc",
+      "aliases": {
+        "testnet": "0x4653f80eee03b7ac"
+      }
+    },
     "CustodialAccountDirectory": {
       "source": "./cadence/contracts/CustodialAccountDirectory.cdc",
       "aliases": {
@@ -58,7 +64,11 @@
   "accounts": {},
   "deployments": {
     "testnet": {
-      "admin-account": ["MightyCat", "CustodialAccountDirectory"]
+      "admin-account": [
+        "MightyCat",
+        "MightyCatsGame",
+        "CustodialAccountDirectory"
+      ]
     }
   }
 }

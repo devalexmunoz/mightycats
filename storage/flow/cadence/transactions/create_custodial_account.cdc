@@ -1,4 +1,5 @@
 import "CustodialAccountDirectory"
+import "MightyCatsGame"
 import "NonFungibleToken"
 import "MightyCat"
 import "MetadataViews"
@@ -38,6 +39,11 @@ transaction(
         let directoryRef = adminAccount.borrow<&CustodialAccountDirectory.Directory>(
                 from: CustodialAccountDirectory.DirectoryStoragePath
             ) ?? panic("No AccountDirectory in admin's account!")
+
+         // Borrow a reference to the Game Admin resource in storage
+        let gameAdminRef = adminAccount.borrow<&MightyCatsGame.Admin>(
+                from: MightyCatsGame.AdminStoragePath
+            ) ?? panic("Could not borrow a reference to the game admin resource")
 
         /* --- Account Creation --- */
         //
@@ -85,5 +91,10 @@ transaction(
 
         // create a public capability for the collection
         custodialAccount.link<&MightyCat.Collection{NonFungibleToken.CollectionPublic, MightyCat.MightyCatCollectionPublic, MetadataViews.ResolverCollection}>(MightyCat.CollectionPublicPath, target: MightyCat.CollectionStoragePath)
+
+
+        /* --- Set up User Gameplay --- */
+        //
+        gameAdminRef.createUserGameplay(user: custodialAccount.address)
     }
 }
