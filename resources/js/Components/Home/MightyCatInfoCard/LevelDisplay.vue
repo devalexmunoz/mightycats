@@ -78,6 +78,9 @@
 
 <style lang="scss" scoped>
   .level-indicator {
+    color: #5cdbf8;
+    font-size: 1.3rem;
+    font-weight: 900;
     padding-right: 1rem;
     white-space: nowrap;
   }

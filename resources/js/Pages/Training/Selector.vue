@@ -3,6 +3,8 @@
   import { Head } from '@inertiajs/vue3'
   import { useTrainingModule } from '@/Modules/TrainingModule'
 
+  import imgRandom from '@img/training/img-random.png'
+
   const options = {
     animationInterval: 130,
     animationDuration: 130 * 15,
@@ -58,10 +60,23 @@
 <template>
   <Head title="Training selector" />
   <div class="container">
-    <h1>Training Selector</h1>
+    <h1>Training</h1>
+    <img class="img-random" :src="imgRandom" />
     <template v-if="selectedActivity">
       <p>Today's training session will be:</p>
       <h3 v-text="selectedActivityText"></h3>
     </template>
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .container {
+    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
+    overflow: hidden;
+  }
+
+  .img-random {
+    width: 200px;
+    margin-bottom: 1rem;
+  }
+</style>

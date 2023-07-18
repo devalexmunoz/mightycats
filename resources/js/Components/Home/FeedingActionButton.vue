@@ -37,7 +37,7 @@
 <template>
   <button
     v-if="cooldownStatus"
-    class="btn"
+    class="btn btn-primary btn-blue"
     :disabled="cooldownStatus.cooldownActive"
     @click="startFeedingAction"
   >
@@ -50,6 +50,6 @@
     >
       {{ hours }}:{{ minutes }}:{{ seconds }}
     </VueCountdown>
-    <template v-else> Feed </template>
+    <span v-else> Feed </span>
   </button>
 </template>

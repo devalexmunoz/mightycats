@@ -97,5 +97,12 @@
 <style lang="scss" scoped>
   #action-display {
     text-align: center;
+    h3 {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
   }
 </style>

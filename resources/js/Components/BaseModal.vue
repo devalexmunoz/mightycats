@@ -56,13 +56,14 @@
     inset: 0;
     background: rgb(0 0 0 / 50%);
     animation: 0.2s ease-in 0s 1 fade-in;
+    z-index: 10;
   }
 
   .modal {
     position: fixed;
     top: 50%;
     left: 50%;
-    z-index: 1;
+    z-index: 11;
 
     display: flex;
     flex-direction: column;

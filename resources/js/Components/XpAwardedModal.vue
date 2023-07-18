@@ -2,6 +2,8 @@
   import { ref } from 'vue'
   import BaseModal from '@/Components/BaseModal.vue'
 
+  import iconMightyPoints from '@img/mighty-points-icon.svg?raw'
+
   defineProps({
     xpGained: {
       type: Number,
@@ -33,11 +35,17 @@
     </div>
     <div class="modal-body">
       Your mighty cat gained
-      <span class="points-awarded">{{ xpGained }}</span>
-      Mighty Points
+      <div class="points-awarded">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <span class="icon-mighty-points" v-html="iconMightyPoints"></span>
+        <span class="xp-gained">{{ xpGained }}</span>
+      </div>
+      <span class="label-migthy-points">Mighty Points</span>
     </div>
-    <div class="modal-action">
-      <button class="btn" @click="close">Ok</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary btn-yellow" @click="close">
+        <span>Ok</span>
+      </button>
     </div>
   </BaseModal>
 </template>
@@ -51,19 +59,38 @@
   .modal-title {
     p {
       margin-bottom: 0;
+      font-weight: bold;
     }
   }
 
   .modal-body {
-    padding: 3rem 0;
+    width: 100%;
+    padding: 1.5rem 0;
     margin: 1rem 0;
+    background: #2e39ac;
+    border: solid 3px var(--color-white);
+    border-radius: 1rem;
 
     .points-awarded {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .xp-gained {
+        font-family: 'Lilita One', display;
+        font-size: 4rem;
+
+        margin-left: 0.5rem;
+      }
+    }
+
+    .label-migthy-points {
+      color: #5cdbf8;
+      font-weight: bold;
     }
   }
 
-  .modal-action {
+  .modal-actions {
     .btn {
       display: block;
       width: 10rem;

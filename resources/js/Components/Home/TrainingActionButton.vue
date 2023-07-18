@@ -55,7 +55,7 @@
 <template>
   <button
     v-if="cooldownStatus"
-    class="btn"
+    class="btn btn-primary btn-yellow"
     :disabled="cooldownStatus.cooldownActive"
     @click="confirmTrainingAction"
   >
@@ -69,10 +69,12 @@
       {{ hours }}:{{ minutes }}:{{ seconds }}
     </VueCountdown>
     <template v-else>
-      Training
-      <span v-if="cooldownStatus"
-        >({{ cooldownStatus.activitiesRemaining }})</span
-      >
+      <span>
+        Training
+        <template v-if="cooldownStatus">
+          ({{ cooldownStatus.activitiesRemaining }})
+        </template>
+      </span>
     </template>
   </button>
 </template>

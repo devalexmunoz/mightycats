@@ -66,13 +66,17 @@
 </script>
 
 <template>
-  <span class="xp-count" v-text="formattedXpCount"></span>
+  <h3 class="xp-count" v-text="formattedXpCount"></h3>
   <span class="xp-label">Mighty Points</span>
 </template>
 
 <style lang="scss" scoped>
   .xp-count {
     display: block;
+    color: #2e39ac;
+    margin-bottom: 0;
+  }
+  .xp-label {
     font-weight: bold;
   }
 </style>

@@ -20,8 +20,9 @@
 
 <style lang="scss" scoped>
   #action-buttons {
-    margin: 1rem;
-    margin-top: 5rem;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 4rem;
 
     :deep(.btn) {
       width: 10rem;

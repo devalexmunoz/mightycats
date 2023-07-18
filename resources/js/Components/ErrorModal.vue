@@ -26,8 +26,10 @@
     <div class="modal-body">
       There was an error connecting to the game server.
     </div>
-    <div class="modal-action">
-      <button class="btn" @click="close">Ok</button>
+    <div class="modal-actions">
+      <button class="btn btn-primary btn-yellow" @click="close">
+        <span>Ok</span>
+      </button>
     </div>
   </BaseModal>
 </template>
@@ -39,11 +41,11 @@
   }
 
   .modal-body {
-    padding: 3rem 0;
+    padding-bottom: 1rem;
     margin: 1rem 0;
   }
 
-  .modal-action {
+  .modal-actions {
     .btn {
       display: block;
       width: 10rem;

@@ -96,3 +96,25 @@
   <!--  Error Modal  -->
   <ErrorModal ref="errorModal" @close="onErrorModalClose" />
 </template>
+
+<style lang="scss" scoped>
+  .container {
+    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
+    overflow: hidden;
+    padding-bottom: 30%;
+
+    &::after {
+      content: '';
+      display: block;
+
+      border-top: solid 3px #1d36a6;
+      background: linear-gradient(180deg, #ff70a8 0%, #bf36ff 100%);
+
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 30%;
+    }
+  }
+</style>

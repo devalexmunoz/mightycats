@@ -26,6 +26,9 @@ const fetchUserNftData = async () => {
   }
 
   const nftData = await mightyCatsNftModule.getUserMightyCatNftById(nftID)
+  if (!nftData) {
+    return nftData
+  }
 
   return formatNftData(nftData)
 }

@@ -5,10 +5,17 @@
   --color-yellow: #f7fd06;
   --color-green: #19db0c;
   --color-red: #ff4242;
+  --color-blue: #2D86FE;
 
   /* hsl color definitions, useful for native css manipulation (darken, lighten) */
   --color-white-hs: 0, 0%;
   --color-white-l: 100%;
+
+  --color-light-blue-hs: 191, 92%;
+  --color-light-blue-l: 67%;
+
+  --color-light-yellow-hs: 50, 100%;
+  --color-light-yellow-l: 75%;
 
   /* semantic color variables for this project */
   --background-color: var(--color-dark-gray);
@@ -27,6 +34,22 @@
     var(--color-white-hs),
     calc(var(--color-white-l) - 15%)
   );
+  --btn-blue-hover-background-color: hsl(
+      var(--color-light-blue-hs),
+      calc(var(--color-light-blue-l) - 7.5%)
+  );
+  --btn-blue-active-background-color: hsl(
+      var(--color-light-blue-hs),
+      calc(var(--color-light-blue-l) - 15%)
+  );
+  --btn-yellow-hover-background-color: hsl(
+      var(--color-light-yellow-hs),
+      calc(var(--color-light-yellow-l) - 7.5%)
+  );
+  --btn-yellow-active-background-color: hsl(
+      var(--color-light-yellow-hs),
+      calc(var(--color-light-yellow-l) - 15%)
+  );
   /* stylelint-enable */
 }
 
@@ -40,7 +63,7 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: var(--text-color);
   background: var(--background-color);
 }
@@ -53,15 +76,20 @@ h5,
 h6 {
   margin-bottom: 1rem;
 
-  font-family: sans-serif;
-  font-weight: bold;
+  font-family: 'Lilita One', display;
+  font-weight: normal;
   line-height: 1.1;
-  text-transform: uppercase;
 }
 
 h1 {
   margin-bottom: 1rem;
   font-size: 4rem;
+}
+h3{
+  font-size: 1.5rem;
+  @media(min-width: 768px) {
+    font-size: 2rem;
+  }
 }
 
 a {
@@ -75,6 +103,10 @@ a {
 
 p {
   margin-bottom: 1rem;
+}
+
+strong{
+  font-weight: bold;
 }
 
 input {
@@ -94,6 +126,7 @@ input {
 }
 
 .btn {
+  display: inline-block;
   padding: 1rem;
 
   font-family: inherit;
@@ -120,6 +153,121 @@ input {
   }
 }
 
+.btn-primary{
+  font-family: 'Lilita One', display;
+  font-size: 1.3rem;
+  background: none;
+  position: relative;
+
+  width: 12rem;
+  height: 3.5rem;
+
+  &::before,
+  &::after{
+    content: '';
+    display: block;
+
+    position: absolute;
+    inset: 0;
+    transform: perspective(15px) rotateX(-1deg);
+
+    border: solid 1px;
+  }
+
+  &::before{
+    z-index: 1;
+    border-radius: 0.25rem;
+  }
+
+  &::after{
+    border-radius: 0.5rem;
+    margin-bottom: -5px;
+  }
+
+  span{
+    position: absolute;
+    inset: 0;
+    bottom: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    z-index: 2;
+
+    &::before{
+      content: "";
+      display: block;
+      background: rgba(255,255,255,0.4);
+      width: 100%;
+      height: 2.25rem;
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      transform: rotate(-68deg);
+      left: 20%;
+
+      transition: 0.1s left ease;
+    }
+  }
+
+  &:hover,
+  &:focus{
+    background: none;
+
+    span::before{
+      left: 0%;
+    }
+  }
+
+  &.btn-blue{
+    color: #2E39AC;
+
+    &::before,
+    &::after{
+      border-color: #2E39AC;
+    }
+
+    &::before{
+      background: #5CDBF8;
+    }
+
+    &::after{
+      background: var(--color-blue);
+    }
+
+    &:active{
+      &::before{
+        background: var(--btn-blue-active-background-color);
+      }
+    }
+  }
+
+  &.btn-yellow{
+    color: #2E39AC;
+
+    &::before,
+    &::after{
+      border-color: #C05AFF;
+    }
+
+    &::before{
+      background: #FFE980;
+    }
+
+    &::after{
+      background: linear-gradient(to left, #F2C95F, #FF61D3);
+    }
+
+    &:active{
+      &::before{
+        background: var(--btn-yellow-active-background-color);
+      }
+    }
+  }
+}
+
 .navbar {
   position: absolute;
   top: 0;
@@ -131,12 +279,42 @@ input {
   justify-content: flex-end;
   justify-content: space-between;
 
-  padding: 1rem 2rem;
+  padding: 1rem;
+  @media(min-width: 768px){
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .navbar-brand {
+    margin: -0.5rem 0;
+    line-height: 0;
+  }
+
+  .btn{
+    color: var(--color-blue);
+    font-weight: bold;
+    border-radius: 5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
-.navbar-brand {
-  margin: -0.5rem 0;
-  line-height: 0;
+.modal{
+  background: linear-gradient(180deg, #2FB4FF 0%, #5CDBF8 100%);
+  border-radius: 0.5rem;
+  border: solid 5px;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.5);
+
+  .btn-close{
+    background: var(--color-red);
+  }
+
+  .modal-actions{
+    .btn-primary{
+      width: 8rem;
+      height: 2.5rem;
+    }
+  }
 }
 
 .form-control {

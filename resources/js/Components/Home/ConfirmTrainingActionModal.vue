@@ -5,6 +5,8 @@
   import VueCountdown from '@chenfengyuan/vue-countdown'
   import BaseModal from '@/Components/BaseModal.vue'
 
+  import imgRandom from '@img/training/img-random.png'
+
   const emit = defineEmits(['confirm', 'cancel'])
 
   // TODO: Find a way to automatically proxy BaseModal methods
@@ -55,14 +57,18 @@
       <h3>Training</h3>
       <p>
         Prepare your mighty cat for the next mission with a special training
-        session
       </p>
     </div>
+    <img class="img-random" :src="imgRandom" />
     <div v-if="cooldownStatus" class="modal-body">
-      Training points: {{ cooldownStatus.activitiesRemaining }}/{{
-        cooldownStatus.activitiesPerCooldown
-      }}
-      <div>
+      <div class="poins-remaining">
+        Training points:
+        {{ cooldownStatus.activitiesRemaining }}/{{
+          cooldownStatus.activitiesPerCooldown
+        }}
+      </div>
+
+      <div class="cooldown-status">
         <template
           v-if="
             cooldownStatus.activitiesRemaining ===
@@ -77,13 +83,17 @@
           :time="getTimerInput()"
           :transform="transformTimerSlots"
         >
-          Next point in {{ hours }}:{{ minutes }}:{{ seconds }}
+          Next training point in {{ hours }}:{{ minutes }}:{{ seconds }}
         </VueCountdown>
       </div>
     </div>
     <div class="modal-actions">
-      <button class="btn" @click="cancel">Cancel</button>
-      <button class="btn" @click="confirm">Train</button>
+      <button class="btn btn-primary btn-blue" @click="cancel">
+        <span>Cancel</span>
+      </button>
+      <button class="btn btn-primary btn-yellow" @click="confirm">
+        <span>Train</span>
+      </button>
     </div>
   </BaseModal>
 </template>
@@ -97,15 +107,26 @@
   .modal-title {
     p {
       margin-bottom: 0;
+      font-weight: bold;
     }
   }
 
-  .modal-body {
-    padding: 3rem 0;
-    margin: 1rem 0;
+  .img-random {
+    width: 150px;
+  }
 
-    .points-awarded {
-      display: block;
+  .modal-body {
+    width: 100%;
+    padding: 1.5rem 0;
+    margin: 1rem 0;
+    background: #2e39ac;
+    border: solid 3px var(--color-white);
+    border-radius: 1rem;
+
+    .poins-remaining {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
     }
   }
 
