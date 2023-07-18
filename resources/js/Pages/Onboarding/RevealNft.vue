@@ -162,7 +162,7 @@
       position: absolute;
       width: 26rem;
       height: 7rem;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgb(0 0 0 / 50%);
       padding: 1rem;
       padding-left: 3rem;
       left: 7rem;

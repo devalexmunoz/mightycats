@@ -76,6 +76,11 @@
       align-items: center;
       justify-content: center;
 
+      .icon-mighty-points {
+        display: inline-block;
+        height: 2.5rem;
+      }
+
       .xp-gained {
         font-family: 'Lilita One', display;
         font-size: 4rem;

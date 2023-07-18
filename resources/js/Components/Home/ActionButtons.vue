@@ -24,9 +24,13 @@
     bottom: 0;
     margin-bottom: 4rem;
 
-    :deep(.btn) {
+    :deep(.btn-primary) {
       width: 10rem;
       margin: 0 0.5rem;
+
+      &[disabled] {
+        opacity: 1;
+      }
     }
   }
 </style>

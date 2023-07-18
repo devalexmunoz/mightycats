@@ -5,6 +5,8 @@
     calculateAnimationDuration,
   } from '@/Utils/XpAnimation'
 
+  import iconMightyPoints from '@img/mighty-points-icon.svg?raw'
+
   const props = defineProps({
     xp: {
       type: Number,
@@ -66,15 +68,30 @@
 </script>
 
 <template>
-  <h3 class="xp-count" v-text="formattedXpCount"></h3>
+  <h3>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <span class="icon-mighty-points" v-html="iconMightyPoints"></span>
+    <span class="xp-count" v-text="formattedXpCount"></span>
+  </h3>
   <span class="xp-label">Mighty Points</span>
 </template>
 
 <style lang="scss" scoped>
-  .xp-count {
-    display: block;
-    color: #2e39ac;
+  h3 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     margin-bottom: 0;
+  }
+
+  .icon-mighty-points {
+    display: inline-block;
+    height: 2rem;
+  }
+
+  .xp-count {
+    color: #2e39ac;
+    margin-left: 0.25rem;
   }
   .xp-label {
     font-weight: bold;
