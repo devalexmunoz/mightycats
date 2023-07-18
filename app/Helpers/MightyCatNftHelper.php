@@ -9,19 +9,19 @@ class MightyCatNftHelper
             'version' => '0',
             'nickname' => 'Pelusa',
             'gender' => 'F',
-            'about' => 'Lorem impsum...',
+            'about' => 'A curious Calico that loves to chase and hunt',
         ],
         [
             'version' => '1',
             'nickname' => 'Cotton',
             'gender' => 'F',
-            'about' => 'Lorem impsum...',
+            'about' => 'A white furred kitten that loves to nap',
         ],
         [
             'version' => '2',
             'nickname' => 'Salem',
             'gender' => 'M',
-            'about' => 'Lorem impsum...',
+            'about' => 'A dark furred kitten that loves to play',
         ],
     ];
 
