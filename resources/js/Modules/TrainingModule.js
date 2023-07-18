@@ -102,52 +102,74 @@ const goToSelectedActivity = () => {
 }
 
 const getTrainingCooldownStatus = async () => {
+  cooldownStatus.value = await fetchTrainingCooldownStatus()
+
+  return cooldownStatus.value
+}
+
+const fetchTrainingCooldownStatus = async () => {
   const gameCooldownStatus = await mightyCatsGameModule.getTrainingCooldown()
   const now = getCurrentTimestamp()
 
-  let isCooldownActive = false
-  let activitiesRemaining = gameCooldownStatus.activities_per_cooldown
-  let lastTimestampInCooldown = null
+  const cooldownTimeSetting = gameCooldownStatus.cooldown
   const activitiesPerCooldown = gameCooldownStatus.activities_per_cooldown
+  const lastActivitiesTimestamps = gameCooldownStatus.last_activities_timestamps
+
+  let isCooldownActive = false
+  let activitiesRemaining = activitiesPerCooldown
+  let lastTimestampInCooldown = null
+
   let response = {
     cooldownActive: isCooldownActive,
     activitiesRemaining: activitiesRemaining,
     activitiesPerCooldown: activitiesPerCooldown,
   }
 
-  if (
-    gameCooldownStatus.last_activities_timestamps &&
-    gameCooldownStatus.cooldown
-  ) {
-    isCooldownActive = true
-    gameCooldownStatus.last_activities_timestamps.forEach((timestamp) => {
-      if (
-        now >
-        convertSecondsToMilliseconds(timestamp + gameCooldownStatus.cooldown)
-      ) {
-        isCooldownActive = false
-        return
-      } else {
+  if (!lastActivitiesTimestamps || !cooldownTimeSetting) {
+    return response
+  }
+
+  if (lastActivitiesTimestamps.length < activitiesPerCooldown) {
+    lastActivitiesTimestamps.forEach((timestamp) => {
+      if (now < convertSecondsToMilliseconds(timestamp + cooldownTimeSetting)) {
         activitiesRemaining--
         lastTimestampInCooldown = timestamp
       }
     })
 
-    response.cooldownActive = isCooldownActive
     response.activitiesRemaining = activitiesRemaining
-
-    if (isCooldownActive) {
-      response.cooldownEndTimestamp = convertSecondsToMilliseconds(
-        lastTimestampInCooldown + gameCooldownStatus.cooldown
-      )
-    } else if (activitiesRemaining < activitiesPerCooldown) {
+    if (activitiesRemaining < activitiesPerCooldown) {
       response.refreshTimestamp = convertSecondsToMilliseconds(
-        lastTimestampInCooldown + gameCooldownStatus.cooldown
+        lastTimestampInCooldown + cooldownTimeSetting
       )
     }
+
+    return response
   }
 
-  cooldownStatus.value = response
+  isCooldownActive = true
+  lastActivitiesTimestamps.forEach((timestamp) => {
+    if (now > convertSecondsToMilliseconds(timestamp + cooldownTimeSetting)) {
+      isCooldownActive = false
+      return
+    } else {
+      activitiesRemaining--
+      lastTimestampInCooldown = timestamp
+    }
+  })
+
+  response.cooldownActive = isCooldownActive
+  response.activitiesRemaining = activitiesRemaining
+
+  if (isCooldownActive) {
+    response.cooldownEndTimestamp = convertSecondsToMilliseconds(
+      lastTimestampInCooldown + cooldownTimeSetting
+    )
+  } else if (activitiesRemaining < activitiesPerCooldown) {
+    response.refreshTimestamp = convertSecondsToMilliseconds(
+      lastTimestampInCooldown + cooldownTimeSetting
+    )
+  }
 
   return response
 }
