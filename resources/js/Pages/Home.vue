@@ -34,7 +34,7 @@
     <div id="action-container"></div>
 
     <div
-      class="mighty-cat"
+      class="mighty-cat-container"
       :class="{
         feeding: feedingStatus === 'feeding',
         'post-feeding': feedingStatus === 'done' || feedingStatus === 'results',
@@ -59,20 +59,28 @@
 
   #action-container {
     position: absolute;
-    top: 12rem;
+    top: 14rem;
+    @media (min-width: 768px) {
+      top: 12rem;
+    }
   }
 
-  .mighty-cat {
+  .mighty-cat-container {
     position: absolute;
     top: 55%;
     transform: translate(0, -50%);
-    width: 300px;
+    width: 250px;
+    @media (min-width: 768px) {
+      width: 300px;
+    }
     padding: 1rem;
 
     &.feeding {
-      top: 70%;
-      left: 30%;
-      transform: scale(-1, 1);
+      left: 50%;
+      transform: translateX(-150px) scaleX(-1);
+      @media (min-width: 768px) {
+        transform: translateX(-280px) scaleX(-1);
+      }
     }
 
     &.post-feeding {
@@ -83,6 +91,10 @@
   .item-food-bowl {
     position: absolute;
     bottom: -1.5rem;
-    left: 15%;
+    left: 50%;
+    transform: translate(-75%, 0);
+    @media (min-width: 768px) {
+      transform: translate(-115%, 0);
+    }
   }
 </style>

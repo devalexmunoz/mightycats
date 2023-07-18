@@ -57,7 +57,10 @@
     padding: 1rem;
 
     position: absolute;
-    top: 3rem;
+    top: 5rem;
+    @media (min-width: 768px) {
+      top: 3rem;
+    }
 
     background: var(--color-white);
     border-radius: 1rem 0.25rem 1rem 0.25rem;

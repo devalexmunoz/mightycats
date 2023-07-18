@@ -70,6 +70,10 @@
 </template>
 
 <style lang="scss" scoped>
+  h1 {
+    font-size: 2.5rem;
+  }
+
   .container {
     background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
     overflow: hidden;

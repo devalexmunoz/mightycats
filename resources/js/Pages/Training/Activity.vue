@@ -78,7 +78,6 @@
   <template v-if="activity">
     <Head :title="`Training: ${activity.name}`" />
     <div class="container">
-      <h1>{{ activity.name }}</h1>
       <component :is="activitiesComponents[activity.name]"></component>
     </div>
   </template>
@@ -101,7 +100,6 @@
   .container {
     background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
     overflow: hidden;
-    padding-bottom: 30%;
 
     &::after {
       content: '';

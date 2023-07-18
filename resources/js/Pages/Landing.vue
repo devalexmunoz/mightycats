@@ -75,7 +75,10 @@
 
     &::before {
       inset: 0;
-      transform: rotate(5deg) scale(1.1);
+      transform: rotate(4deg) scale(1.2);
+      @media (min-width: 768px) {
+        transform: rotate(5deg) scale(1.15);
+      }
       background: #181b56;
     }
 
@@ -83,11 +86,11 @@
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
       border-right: 10px solid #181b56;
-      right: 0%;
-      bottom: 58%;
+      right: 10%;
+      bottom: 64%;
       transform: rotate(276deg) scale(20);
       @media (min-width: 768px) {
-        right: 4rem;
+        right: 3rem;
         bottom: 25%;
         transform: rotate(7deg) scale(20);
       }
@@ -106,8 +109,10 @@
   }
 
   h3 {
+    font-size: 1.5rem;
     margin-top: 1rem;
     @media (min-width: 768px) {
+      font-size: 2rem;
       margin-top: 4rem;
     }
   }
@@ -116,12 +121,13 @@
     position: absolute;
     z-index: 0;
     width: 479px;
-    right: 0;
+    left: 50%;
     bottom: 0%;
-    margin-right: 3rem;
+    transform: translate(-53%, 0);
     @media (min-width: 768px) {
       margin-right: 0;
       top: 15%;
+      left: auto;
       right: 5%;
       transform: scale(1.3);
     }

@@ -47,7 +47,7 @@
       </div>
     </nav>
 
-    <template v-if="nftData">
+    <div v-if="nftData" class="content">
       <div class="presentation-card">
         <span class="serial"
           >Mighty Cat {{ formatSerial(nftData.itemID) }}</span
@@ -94,7 +94,7 @@
           <span>Let's do it!</span>
         </Link>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -102,6 +102,21 @@
   .container {
     background: linear-gradient(179deg, #c05aff 0%, #715aff 100%);
     overflow: hidden;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    max-width: 1200px;
+
+    padding-top: 4rem;
+    @media (min-width: 768px) {
+      padding-top: 0;
+    }
   }
 
   .presentation-card {
@@ -123,9 +138,13 @@
       color: var(--color-white);
       font-weight: bold;
       margin-top: -2rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       padding: 0.5rem 1rem;
       border-radius: 1rem 0 1rem 0;
+    }
+
+    h3 {
+      margin-bottom: 0.5rem;
     }
 
     .icon-female {
@@ -137,13 +156,16 @@
 
     p {
       margin-bottom: 0;
+      text-align: center;
     }
   }
 
   .presentation-mighty-cat {
-    position: absolute;
-    top: 12rem;
     width: 350px;
+    margin: 1rem 0;
+    @media (min-width: 768px) {
+      margin: 2rem 0;
+    }
     padding: 0rem 4rem;
 
     background: var(--background-image) no-repeat;
@@ -151,25 +173,54 @@
   }
 
   .dialog-container {
-    width: 35rem;
-    margin-top: 12rem;
+    width: 100%;
+    max-width: 25rem;
+
+    @media (min-width: 768px) {
+      max-width: 35rem;
+
+      padding-left: 7rem;
+      @media (min-width: 768px) {
+        margin-top: -1rem;
+      }
+    }
 
     .dialog-character {
-      width: 170px;
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      width: 130px;
+      margin-bottom: -1rem;
       z-index: 1;
+
+      @media (min-width: 768px) {
+        width: 170px;
+        left: 0;
+        top: -5rem;
+        bottom: auto;
+      }
     }
     .dialog-text {
-      position: absolute;
-      width: 26rem;
-      height: 7rem;
+      width: 100%;
+      min-height: 6rem;
+
       background: rgb(0 0 0 / 50%);
       padding: 1rem;
-      padding-left: 3rem;
-      left: 7rem;
-      top: 6rem;
-
       border-radius: 0.25rem;
       border: solid 3px #d7ffff;
+
+      @media (min-width: 768px) {
+        min-height: 7.3rem;
+        width: 26rem;
+        padding-left: 3rem;
+      }
+    }
+  }
+
+  .onboarding-action {
+    margin-top: 1rem;
+    @media (min-width: 768px) {
+      margin-top: 2rem;
     }
   }
 </style>

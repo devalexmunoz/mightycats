@@ -37,20 +37,22 @@
       </div>
     </nav>
 
-    <img class="img-onboarding" :src="imgOnboarding" />
+    <div class="content">
+      <img class="img-onboarding" :src="imgOnboarding" />
 
-    <div class="dialog-container">
-      <img class="dialog-character" :src="imgCharacters" />
-      <AnimatedDialog class="dialog-text">
-        Thanks for coming mighty ranger! We have detected a new "cat"-astrophe
-        and need to evacuate some kittens A.S.A.P.
-      </AnimatedDialog>
-    </div>
+      <div class="dialog-container">
+        <img class="dialog-character" :src="imgCharacters" />
+        <AnimatedDialog class="dialog-text">
+          Thanks for coming mighty ranger! We have detected a new "cat"-astrophe
+          and need to evacuate some kittens A.S.A.P.
+        </AnimatedDialog>
+      </div>
 
-    <div class="onboarding-action">
-      <button class="btn btn-primary btn-yellow" @click="onButtonClick">
-        <span>Send rescue pod <small>($50)</small></span>
-      </button>
+      <div class="onboarding-action">
+        <button class="btn btn-primary btn-yellow" @click="onButtonClick">
+          <span>Send rescue pod <small>($50)</small></span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -82,48 +84,70 @@
     overflow: hidden;
   }
 
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    max-width: 1200px;
+  }
+
   .img-onboarding {
-    width: 380px;
-    position: absolute;
-    top: 1rem;
+    width: 325px;
+    @media (min-width: 768px) {
+      width: 380px;
+    }
   }
 
   .dialog-container {
-    width: 35rem;
-    margin-top: 8rem;
+    width: 100%;
+    max-width: 25rem;
+
+    @media (min-width: 768px) {
+      max-width: 35rem;
+
+      padding-left: 7rem;
+      margin-top: -4rem;
+    }
 
     .dialog-character {
-      width: 170px;
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      width: 130px;
+      margin-bottom: -1rem;
       z-index: 1;
+
+      @media (min-width: 768px) {
+        width: 170px;
+        left: 0;
+        top: -5rem;
+        bottom: auto;
+      }
     }
     .dialog-text {
-      position: absolute;
-      width: 26rem;
-      height: 7rem;
+      width: 100%;
+      min-height: 7.3rem;
+
       background: rgb(0 0 0 / 50%);
       padding: 1rem;
-      padding-left: 3rem;
-      left: 7rem;
-      top: 6rem;
-
       border-radius: 0.25rem;
       border: solid 3px #d7ffff;
+
+      @media (min-width: 768px) {
+        width: 26rem;
+        padding-left: 3rem;
+      }
     }
   }
 
   .onboarding-action {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    z-index: 1;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 5rem 0;
+    margin-top: 3rem;
+    @media (min-width: 768px) {
+      margin-top: 5rem;
+    }
 
     .btn-primary {
       span {

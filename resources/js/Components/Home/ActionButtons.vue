@@ -22,7 +22,10 @@
   #action-buttons {
     position: absolute;
     bottom: 0;
-    margin-bottom: 4rem;
+    margin-bottom: 1.5rem;
+    @media (min-width: 768px) {
+      margin-bottom: 4rem;
+    }
 
     :deep(.btn-primary) {
       width: 10rem;

@@ -95,19 +95,21 @@
 <template>
   <Head title="Onboarding" />
   <div class="container" :style="`--background-image: url(${imgBackground})`">
-    <img class="img-minting" :src="imgMinting" />
+    <div class="content">
+      <img class="img-minting" :src="imgMinting" />
 
-    <div class="dialog-container">
-      <img class="dialog-character" :src="imgCharacters" />
-      <AnimatedDialog class="dialog-text">
-        Thanks for the help! We have secured a kitten and it's now in its way to
-        the safe zone. Why don't you meet it there?
-      </AnimatedDialog>
-    </div>
+      <div class="dialog-container">
+        <img class="dialog-character" :src="imgCharacters" />
+        <AnimatedDialog class="dialog-text">
+          Thanks for the help! We have secured a kitten and it's now in its way
+          to the safe zone. Why don't you meet it there?
+        </AnimatedDialog>
+      </div>
 
-    <div class="status">
-      <p v-if="status === 'creating-account'">Setting up account...</p>
-      <p v-else-if="status === 'minting-nft'">Minting NFT...</p>
+      <div class="status">
+        <p v-if="status === 'creating-account'">Setting up account...</p>
+        <p v-else-if="status === 'minting-nft'">Minting NFT...</p>
+      </div>
     </div>
 
     <!--  Error Modal  -->
@@ -137,41 +139,76 @@
     }
   }
 
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    max-width: 1200px;
+  }
+
   .img-minting {
     width: 450px;
-    position: absolute;
-    top: -10rem;
     margin-left: -5rem;
+    margin-top: -12rem;
 
     animation: 0.25s shake ease-in-out infinite;
   }
 
   .dialog-container {
-    width: 35rem;
-    margin-top: 18rem;
+    width: 100%;
+    max-width: 25rem;
+
+    @media (min-width: 768px) {
+      max-width: 35rem;
+
+      padding-left: 7rem;
+    }
 
     .dialog-character {
-      width: 170px;
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      width: 130px;
+      margin-bottom: -1rem;
       z-index: 1;
+
+      @media (min-width: 768px) {
+        width: 170px;
+        left: 0;
+        top: -5rem;
+        bottom: auto;
+      }
     }
     .dialog-text {
-      position: absolute;
-      width: 26rem;
-      height: 7rem;
+      width: 100%;
+      min-height: 7.3rem;
+
       background: rgb(0 0 0 / 50%);
       padding: 1rem;
-      padding-left: 3rem;
-      left: 7rem;
-      top: 6rem;
-
       border-radius: 0.25rem;
       border: solid 3px #d7ffff;
+
+      @media (min-width: 768px) {
+        width: 26rem;
+        padding-left: 3rem;
+      }
     }
   }
 
   .status {
-    min-height: 1rem;
+    min-height: 1.2rem;
     margin-top: 3rem;
+    @media (min-width: 768px) {
+      margin-top: 5rem;
+    }
+
     text-align: center;
+
+    p {
+      margin-bottom: 0;
+    }
   }
 </style>

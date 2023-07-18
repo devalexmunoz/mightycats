@@ -1,6 +1,13 @@
 <script setup>
-  import { computed } from 'vue'
+  import { computed, defineProps } from 'vue'
   import { useTrainingModule } from '@/Modules/TrainingModule'
+
+  const props = defineProps({
+    title: {
+      type: String,
+      required: true,
+    },
+  })
 
   const trainingModule = useTrainingModule()
   const status = computed(() => {
@@ -9,6 +16,7 @@
 </script>
 
 <template>
+  <h3>{{ props.title }}</h3>
   <template v-if="status === 'training'">
     <slot name="training"></slot>
   </template>
@@ -16,3 +24,10 @@
     <slot name="done"></slot>
   </template>
 </template>
+
+<style lang="scss" scoped>
+  h3 {
+    font-size: 2.5rem;
+    margin-top: -19rem;
+  }
+</style>

@@ -22,34 +22,37 @@
 </script>
 
 <template>
-  <BaseTrainingActivity>
+  <BaseTrainingActivity v-if="nftData" :title="`Flight Simulator`">
     <template #training>
       <p>Ready for takeoff!</p>
-      <img class="img-mighty-cat" :src="imgMap[nftData.version]" />
+      <img class="img-mighty-cat-activity" :src="imgMap[nftData.version]" />
     </template>
     <template #done>
       <p>Finished Flight Simulator!</p>
-      <MightyCat class="mighty-cat-activity-done" />
+      <div class="mighty-cat-container activity-done">
+        <MightyCat />
+      </div>
     </template>
   </BaseTrainingActivity>
 </template>
 
 <style lang="scss" scoped>
   p {
-    font-size: 1.2rem;
+    text-align: center;
+    font-size: 1.25rem;
     font-weight: bold;
   }
 
-  .img-mighty-cat {
-    width: 400px;
+  .img-mighty-cat-activity {
+    width: 350px;
 
     position: absolute;
     bottom: 2rem;
     z-index: 1;
   }
 
-  .mighty-cat-activity-done {
-    width: 280px;
+  .mighty-cat-container.activity-done {
+    width: 220px;
     position: absolute;
     bottom: 6rem;
     z-index: 1;
