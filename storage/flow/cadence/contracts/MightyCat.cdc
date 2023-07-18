@@ -87,13 +87,12 @@ pub contract MightyCat: NonFungibleToken {
             var level: UInt8 = 0
             var found = false
             levelMap.forEachKey(fun (key: UInt8): Bool {
-                if(xp >= levelMap[key]!){
+                if(xp >= levelMap[key]! && key > level){
                     level = key
-                    found = true
                 }
 
-                // Continue searching if level has not been found
-                return found
+                // Iterate over all keys
+                return true
             })
 
             return level
