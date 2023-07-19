@@ -40,7 +40,7 @@
         <span class="icon-mighty-points" v-html="iconMightyPoints"></span>
         <span class="xp-gained">{{ xpGained }}</span>
       </div>
-      <span class="label-migthy-points">Mighty Points</span>
+      <span class="label-mighty-points">Mighty Points</span>
     </div>
     <div class="modal-actions">
       <button class="btn btn-primary btn-yellow" @click="close">
@@ -67,6 +67,7 @@
     width: 100%;
     padding: 1.5rem 0;
     margin: 1rem 0;
+
     background: #2e39ac;
     border: solid 3px var(--color-white);
     border-radius: 1rem;
@@ -82,16 +83,15 @@
       }
 
       .xp-gained {
+        margin-left: 0.5rem;
         font-family: 'Lilita One', display;
         font-size: 4rem;
-
-        margin-left: 0.5rem;
       }
     }
 
-    .label-migthy-points {
-      color: #5cdbf8;
+    .label-mighty-points {
       font-weight: bold;
+      color: #5cdbf8;
     }
   }
 

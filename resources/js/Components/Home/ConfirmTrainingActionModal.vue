@@ -61,7 +61,7 @@
     </div>
     <img class="img-random" :src="imgRandom" />
     <div v-if="cooldownStatus" class="modal-body">
-      <div class="poins-remaining">
+      <div class="points-remaining">
         Training points:
         {{ cooldownStatus.activitiesRemaining }}/{{
           cooldownStatus.activitiesPerCooldown
@@ -119,14 +119,15 @@
     width: 100%;
     padding: 1.5rem 0;
     margin: 1rem 0;
+
     background: #2e39ac;
     border: solid 3px var(--color-white);
     border-radius: 1rem;
 
-    .poins-remaining {
+    .points-remaining {
+      margin-bottom: 1rem;
       font-size: 1.2rem;
       font-weight: bold;
-      margin-bottom: 1rem;
     }
   }
 
