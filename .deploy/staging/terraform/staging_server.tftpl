@@ -1,0 +1,24 @@
+#cloud-config
+groups:
+  - ubuntu: [root,sys]
+  - web: [www-data]
+  - dev
+
+# Add users to the system. Users are added after groups are added.
+users:
+  - default
+  - name: dev
+    gecos: dev
+    shell: /bin/bash
+    primary_group: web
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, dev
+    lock_passwd: false
+    ssh_authorized_keys:
+    %{ for key in keys }
+      - ${key}
+    %{ endfor ~}
+
+runcmd:
+  - sudo apt-get update
+  - sudo apt install -y php8.2-gmp php8.2-bcmath
