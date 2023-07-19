@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <BaseModal ref="modal">
+  <BaseModal ref="modal" :persist-on-dom="true">
     <button class="btn btn-close" @click="close"></button>
     <div class="modal-title">
       <h3>Login</h3>

@@ -7,6 +7,10 @@
       type: Boolean,
       default: true,
     },
+    persistOnDom: {
+      type: Boolean,
+      default: false,
+    },
   })
 
   const isOpen = ref(false)
@@ -32,12 +36,14 @@
 </script>
 
 <template>
-  <Teleport to="body">
-    <div v-show="isOpen" class="modal">
-      <slot></slot>
-    </div>
-    <div v-if="isOpen" class="modal-backdrop" @click="onBackdropClick"></div>
-  </Teleport>
+  <template v-if="props.persistOnDom || isOpen">
+    <Teleport to="body">
+      <div v-show="isOpen" class="modal">
+        <slot></slot>
+      </div>
+      <div v-if="isOpen" class="modal-backdrop" @click="onBackdropClick"></div>
+    </Teleport>
+  </template>
 </template>
 
 <style lang="scss" scoped>
@@ -54,9 +60,11 @@
   .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgb(0 0 0 / 50%);
-    animation: 0.2s ease-in 0s 1 fade-in;
     z-index: 10;
+
+    background: rgb(0 0 0 / 50%);
+
+    animation: 0.2s ease-in 0s 1 fade-in;
   }
 
   .modal {
