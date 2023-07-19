@@ -13,6 +13,7 @@ use App\Http\Controllers\SignFlowMessageController;
 use App\Http\Controllers\UpdateSessionController;
 use App\Http\Controllers\Webhooks\WebhooksController;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -61,7 +62,9 @@ Route::middleware('auth')->group(function () {
 
         Route::put('/user-wallet', [CustodialWalletController::class, 'update'])->name('user-wallet');
 
-        Route::get('/reveal', function () {
+        Route::get('/reveal', function (Request $request) {
+            $request->session()->put('show_welcome_modal', true);
+
             return Inertia::render('Onboarding/RevealNft');
         })->middleware('onboarding-status:'.User::ONBOARDING_STATUS_MINTED)->name('reveal');
 
@@ -69,8 +72,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('onboarding-status:'.User::ONBOARDING_STATUS_COMPLETED)->group(function () {
-        Route::get('/home', function () {
-            return Inertia::render('Home');
+        Route::get('/home', function (Request $request) {
+            return Inertia::render('Home', [
+                'showWelcomeModal' => $request->session()->pull('show_welcome_modal'),
+            ]);
         })->name('home');
 
         Route::get('/training', function () {

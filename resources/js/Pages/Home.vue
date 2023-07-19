@@ -1,6 +1,6 @@
 <script setup>
-  import { computed } from 'vue'
-  import { Head } from '@inertiajs/vue3'
+  import { ref, computed, onMounted } from 'vue'
+  import { Head, usePage } from '@inertiajs/vue3'
   import { useFeedingModule } from '@/Modules/FeedingModule'
   import { logout } from '@/Utils/Auth'
   import MightyCatInfoCard from '@/Components/Home/MightyCatInfoCard.vue'
@@ -9,13 +9,26 @@
   import ActionButtons from '@/Components/Home/ActionButtons.vue'
   import FeedingAction from '@/Components/Home/FeedingAction.vue'
   import TrainingAction from '@/Components/Home/TrainingAction.vue'
+  import WelcomeModal from '@/Components/Home/WelcomeModal.vue'
 
   import imgBackground from '@img/home/bg-home.jpg'
+
+  const welcomeModal = ref(null)
 
   const feedingModule = useFeedingModule()
 
   const feedingStatus = computed(() => {
     return feedingModule.getStatus()
+  })
+
+  const showWelcomeModal = () => {
+    welcomeModal.value.open()
+  }
+
+  onMounted(() => {
+    if (usePage().props.showWelcomeModal) {
+      setTimeout(showWelcomeModal, 2000)
+    }
   })
 </script>
 
@@ -47,20 +60,23 @@
     <ActionButtons />
     <FeedingAction action-container="#action-container" />
     <TrainingAction />
+
+    <WelcomeModal ref="welcomeModal" />
   </div>
 </template>
 
 <style lang="scss" scoped>
   .container {
+    overflow: hidden;
     background: var(--background-image) center;
     background-size: cover;
-    overflow: hidden;
   }
 
   #action-container {
     position: absolute;
     top: 14rem;
-    @media (min-width: 768px) {
+
+    @media (width >= 768px) {
       top: 12rem;
     }
   }
@@ -68,17 +84,21 @@
   .mighty-cat-container {
     position: absolute;
     top: 55%;
-    transform: translate(0, -50%);
+
     width: 250px;
-    @media (min-width: 768px) {
+    padding: 1rem;
+
+    transform: translate(0, -50%);
+
+    @media (width >= 768px) {
       width: 300px;
     }
-    padding: 1rem;
 
     &.feeding {
       left: 50%;
       transform: translateX(-150px) scaleX(-1);
-      @media (min-width: 768px) {
+
+      @media (width >= 768px) {
         transform: translateX(-280px) scaleX(-1);
       }
     }
@@ -93,7 +113,8 @@
     bottom: -1.5rem;
     left: 50%;
     transform: translate(-75%, 0);
-    @media (min-width: 768px) {
+
+    @media (width >= 768px) {
       transform: translate(-115%, 0);
     }
   }
