@@ -13,7 +13,10 @@ window.route = (name, params) => route(name, params, false, ZiggyConfig)
 /*
  * Helper function to fetch Vite env variables
  */
-window.getViteEnv = (viteVariable) => import.meta.env['VITE_' + viteVariable]
+window.getViteEnv = (viteVariable) => {
+  let envKey = 'VITE_' + viteVariable
+  return import.meta.env[envKey]
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
