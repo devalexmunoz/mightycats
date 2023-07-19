@@ -389,6 +389,7 @@ module.exports = {
   ],
   rules: {
     'declaration-empty-line-before': null,
+    'font-family-no-missing-generic-family-keyword': null,
     'order/properties-order': [
       propertyGroups.map((group) => ({
         ...group,
