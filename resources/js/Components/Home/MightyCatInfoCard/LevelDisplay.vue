@@ -46,15 +46,14 @@
     fromXp,
     toXp
   ) => {
-    const progressGain = Math.floor(
-      (toLevel + toProgress / 100 - (fromLevel + fromProgress / 100)) * 100
-    )
+    const progressGain =
+      toLevel * 100 + toProgress - (fromLevel * 100 + fromProgress)
     const duration = calculateAnimationDuration(fromXp, toXp)
     const increments =
       progressGain / (duration / getAnimationOptions().gain_animation_speed)
 
     let animationIntervalRef = setInterval(() => {
-      if (fromProgress + increments > 100) {
+      if (fromProgress + increments >= 100) {
         fromLevel++
       }
 
@@ -78,10 +77,11 @@
 
 <style lang="scss" scoped>
   .level-indicator {
-    color: #5cdbf8;
+    padding-right: 1rem;
+
     font-size: 1.3rem;
     font-weight: 900;
-    padding-right: 1rem;
+    color: #5cdbf8;
     white-space: nowrap;
   }
 </style>
