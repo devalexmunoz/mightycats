@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, defineProps } from 'vue'
+  import { computed } from 'vue'
   import { useTrainingModule } from '@/Modules/TrainingModule'
 
   const props = defineProps({
@@ -27,7 +27,7 @@
 
 <style lang="scss" scoped>
   h3 {
-    font-size: 2.5rem;
     margin-top: -19rem;
+    font-size: 2.5rem;
   }
 </style>
