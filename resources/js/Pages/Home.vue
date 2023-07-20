@@ -33,7 +33,7 @@
 </script>
 
 <template>
-  <Head title="Home" />
+  <Head title="Your Home" />
   <div class="container" :style="`--background-image: url(${imgBackground})`">
     <MightyCatInfoCard />
 
