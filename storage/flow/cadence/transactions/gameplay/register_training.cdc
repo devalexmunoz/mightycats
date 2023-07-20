@@ -62,9 +62,16 @@ transaction(
     execute {
         var currentTimestamp = self.currentTimestamp
         var lastActivitiesTimestamps = self.userGameplay.lastActivitiesTimestamps ?? nil
+        let maxLength = Int(MightyCatsGame.activitiesPerCooldown!)
+
+        if(lastActivitiesTimestamps != nil){
+            if(lastActivitiesTimestamps!.length > maxLength){
+                lastActivitiesTimestamps =  lastActivitiesTimestamps!.slice(from: 0, upTo: maxLength)
+            }
+        }
 
         var cooldownActive = true
-        if(lastActivitiesTimestamps == nil){
+        if(lastActivitiesTimestamps == nil || lastActivitiesTimestamps!.length < maxLength){
             cooldownActive = false
         }else{
             for timestamp in lastActivitiesTimestamps! {
