@@ -41,12 +41,12 @@ Route::middleware('auth')->group(function () {
     /*
     * ONBOARDING
     */
-    Route::prefix('onboarding')->name('onboarding.')->group(function () {
+    Route::prefix('onboarding')->name('onboarding.')->middleware('onboarding.expire-session')->group(function () {
         Route::get('/', function () {
             return Inertia::render('Onboarding/Start', [
                 'purchaseUrl' => URL::temporarySignedRoute('onboarding.purchase', now()->addMinutes(5), ['user' => Auth::id()]),
             ]);
-        })->middleware('onboarding-status:empty')->name('start');
+        })->middleware('onboarding.status:empty')->name('start');
 
         Route::post('/purchase', PurchaseController::class)
             ->middleware('signed')->name('purchase');
@@ -55,10 +55,10 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('Onboarding/MintNft', [
                 'nftProps' => MightyCatNftHelper::getRandomVersion(),
             ]);
-        })->middleware('onboarding-status:'.User::ONBOARDING_STATUS_PURCHASED)->name('mint');
+        })->middleware('onboarding.status:'.User::ONBOARDING_STATUS_PURCHASED)->name('mint');
 
         Route::post('/crypto-keys', [CustodialCryptoKeysController::class, 'store'])
-            ->middleware('onboarding-status:'.User::ONBOARDING_STATUS_PURCHASED)->name('crypto-keys');
+            ->middleware('onboarding.status:'.User::ONBOARDING_STATUS_PURCHASED)->name('crypto-keys');
 
         Route::put('/user-wallet', [CustodialWalletController::class, 'update'])->name('user-wallet');
 
@@ -66,12 +66,12 @@ Route::middleware('auth')->group(function () {
             $request->session()->put('show_welcome_modal', true);
 
             return Inertia::render('Onboarding/RevealNft');
-        })->middleware('onboarding-status:'.User::ONBOARDING_STATUS_MINTED)->name('reveal');
+        })->middleware('onboarding.status:'.User::ONBOARDING_STATUS_MINTED)->name('reveal');
 
         Route::put('/status', [OnboardingStatusController::class, 'update'])->name('status');
     });
 
-    Route::middleware('onboarding-status:'.User::ONBOARDING_STATUS_COMPLETED)->group(function () {
+    Route::middleware('onboarding.status:'.User::ONBOARDING_STATUS_COMPLETED)->group(function () {
         Route::get('/home', function (Request $request) {
             return Inertia::render('Home', [
                 'showWelcomeModal' => $request->session()->pull('show_welcome_modal'),

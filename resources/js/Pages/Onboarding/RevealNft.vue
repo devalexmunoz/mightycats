@@ -1,52 +1,44 @@
 <script setup>
-  import { ref, watchEffect, onBeforeMount, onMounted } from 'vue'
-  import { Head, Link } from '@inertiajs/vue3'
+  import { ref, onBeforeMount } from 'vue'
+  import { Head, router } from '@inertiajs/vue3'
   import { useUserNftModule } from '@/Modules/UserNftModule'
-  import { logout } from '@/Utils/Auth'
   import { formatSerial } from '@/Utils/NftData'
   import MightyCat from '@/Components/MightyCat.vue'
+  import AnimatedDialog from '@/Components/AnimatedDialog.vue'
 
+  /* Image assets */
   import iconFemale from '@img/icons/icon-female.svg?raw'
   import iconMale from '@img/icons/icon-male.svg?raw'
   import imgCharacters from '@img/onboarding/characters.png'
   import imgDecorationReveal from '@img/onboarding/decoration-reveal.png'
-  import AnimatedDialog from '@/Components/AnimatedDialog.vue'
 
   const userNftModule = useUserNftModule()
   const nftData = ref(null)
 
-  const updateOnboardingStatus = async () => {
-    await axios
+  const updateOnboardingStatus = () => {
+    return axios
       .put(route('onboarding.status'), {
         status: 'nft-revealed',
       })
       .catch(() => {})
   }
 
+  const redirectHome = () => {
+    router.get(route('home'))
+  }
+
   onBeforeMount(async () => {
     nftData.value = await userNftModule.getUserNftData()
   })
 
-  onMounted(async () => {
-    watchEffect(() => {
-      // Make sure NFT data is fetched correctly so we can mark reveal as successful
-      if (nftData.value) {
-        updateOnboardingStatus()
-      }
-    })
-  })
+  const onButtonClick = () => {
+    updateOnboardingStatus().then(redirectHome)
+  }
 </script>
 
 <template>
   <Head title="Onboarding" />
   <div class="container">
-    <nav class="navbar">
-      <div></div>
-      <div>
-        <a href="#" class="btn" @click.prevent="logout">Log out</a>
-      </div>
-    </nav>
-
     <div v-if="nftData" class="content">
       <div class="presentation-card">
         <span class="serial"
@@ -86,13 +78,13 @@
       </div>
 
       <div class="onboarding-action">
-        <Link
-          :href="$route('home')"
-          as="button"
+        <button
+          type="button"
           class="btn btn-primary btn-yellow"
+          @click="onButtonClick"
         >
           <span>Let's do it!</span>
-        </Link>
+        </button>
       </div>
     </div>
   </div>
@@ -100,47 +92,51 @@
 
 <style lang="scss" scoped>
   .container {
-    background: linear-gradient(179deg, #c05aff 0%, #715aff 100%);
     overflow: hidden;
+    background: linear-gradient(179deg, #c05aff 0%, #715aff 100%);
   }
 
   .content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 
     width: 100%;
     max-width: 1200px;
-
     padding-top: 4rem;
-    @media (min-width: 768px) {
+
+    @media (width >= 768px) {
       padding-top: 0;
     }
   }
 
   .presentation-card {
-    background: var(--color-white);
-    padding: 1rem 2rem;
-    border-radius: 1rem 0.25rem 1rem 0.25rem;
-    width: 360px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
+    width: 360px;
+    padding: 1rem 2rem;
+
     color: #2e39ac;
+
+    background: var(--color-white);
+    border-radius: 1rem 0.25rem;
 
     .serial {
       display: inline-block;
-      background: #5cdbf8;
-      color: var(--color-white);
-      font-weight: bold;
+
+      padding: 0.5rem 1rem;
       margin-top: -2rem;
       margin-bottom: 0.5rem;
-      padding: 0.5rem 1rem;
-      border-radius: 1rem 0 1rem 0;
+
+      font-weight: bold;
+      color: var(--color-white);
+
+      background: #5cdbf8;
+      border-radius: 1rem 0;
     }
 
     h3 {
@@ -150,6 +146,7 @@
     .icon-female {
       color: #a073ff;
     }
+
     .icon-male {
       color: #5cdbf8;
     }
@@ -162,25 +159,26 @@
 
   .presentation-mighty-cat {
     width: 350px;
+    padding: 0 4rem;
     margin: 1rem 0;
-    @media (min-width: 768px) {
-      margin: 2rem 0;
-    }
-    padding: 0rem 4rem;
 
     background: var(--background-image) no-repeat;
     background-size: contain;
+
+    @media (width >= 768px) {
+      margin: 2rem 0;
+    }
   }
 
   .dialog-container {
     width: 100%;
     max-width: 25rem;
 
-    @media (min-width: 768px) {
+    @media (width >= 768px) {
       max-width: 35rem;
-
       padding-left: 7rem;
-      @media (min-width: 768px) {
+
+      @media (width >= 768px) {
         margin-top: -1rem;
       }
     }
@@ -189,29 +187,31 @@
       position: absolute;
       bottom: 100%;
       left: 0;
-      width: 130px;
-      margin-bottom: -1rem;
       z-index: 1;
 
-      @media (min-width: 768px) {
-        width: 170px;
-        left: 0;
+      width: 130px;
+      margin-bottom: -1rem;
+
+      @media (width >= 768px) {
         top: -5rem;
         bottom: auto;
+        left: 0;
+        width: 170px;
       }
     }
+
     .dialog-text {
       width: 100%;
       min-height: 6rem;
+      padding: 1rem;
 
       background: rgb(0 0 0 / 50%);
-      padding: 1rem;
-      border-radius: 0.25rem;
       border: solid 3px #d7ffff;
+      border-radius: 0.25rem;
 
-      @media (min-width: 768px) {
-        min-height: 7.3rem;
+      @media (width >= 768px) {
         width: 26rem;
+        min-height: 7.3rem;
         padding-left: 3rem;
       }
     }
@@ -219,7 +219,8 @@
 
   .onboarding-action {
     margin-top: 1rem;
-    @media (min-width: 768px) {
+
+    @media (width >= 768px) {
       margin-top: 2rem;
     }
   }
