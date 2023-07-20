@@ -4,6 +4,7 @@
   import { getCurrentTimestamp } from '@/Utils/Date'
   import VueCountdown from '@chenfengyuan/vue-countdown'
   import BaseModal from '@/Components/BaseModal.vue'
+  import BatteryIndicator from '@/Components/Training/BatteryIndicator.vue'
 
   import imgRandom from '@img/training/img-random.png'
 
@@ -61,8 +62,11 @@
     </div>
     <img class="img-random" :src="imgRandom" />
     <div v-if="cooldownStatus" class="modal-body">
+      <BatteryIndicator
+        :activities-remaining="cooldownStatus.activitiesRemaining"
+      />
       <div class="points-remaining">
-        Training points:
+        Energy level:
         {{ cooldownStatus.activitiesRemaining }}/{{
           cooldownStatus.activitiesPerCooldown
         }}
@@ -75,7 +79,7 @@
             cooldownStatus.activitiesPerCooldown
           "
         >
-          You have full training points
+          Your mighty cat has full energy
         </template>
         <VueCountdown
           v-else
@@ -83,7 +87,7 @@
           :time="getTimerInput()"
           :transform="transformTimerSlots"
         >
-          Next training point in {{ hours }}:{{ minutes }}:{{ seconds }}
+          Next energy point in {{ hours }}:{{ minutes }}:{{ seconds }}
         </VueCountdown>
       </div>
     </div>
@@ -115,10 +119,18 @@
     width: 150px;
   }
 
+  .battery-indicator {
+    position: absolute;
+    top: -1.4rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
   .modal-body {
     width: 100%;
     padding: 1.5rem 0;
-    margin: 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 
     background: #2e39ac;
     border: solid 3px var(--color-white);
