@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from 'vue'
   import BaseModal from '@/Components/BaseModal.vue'
-  import GoogleSigninButton from '@/Components/Onboarding/GoogleSigninButton.vue'
+  import GoogleSigninButton from '@/Components/Landing/GoogleSigninButton.vue'
 
   const modal = ref(null)
   const open = () => {

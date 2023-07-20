@@ -2,7 +2,7 @@
   import { ref } from 'vue'
   import { Head } from '@inertiajs/vue3'
   import Logo from '@/Components/Logo.vue'
-  import LoginModal from '@/Components/Onboarding/LoginModal.vue'
+  import LoginModal from '@/Components/Landing/LoginModal.vue'
 
   import imgLanding from '@img/landing/img-landing.png'
 
@@ -39,8 +39,8 @@
 
 <style lang="scss" scoped>
   .container {
-    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
     overflow: hidden;
+    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
   }
 
   .navbar {
@@ -48,48 +48,53 @@
   }
 
   .call-to-action {
-    padding: 1rem;
     position: absolute;
     inset: 0;
     top: 64%;
-    @media (min-width: 768px) {
-      top: 0;
-      right: 55%;
-    }
-
-    text-align: center;
+    z-index: 1;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    z-index: 1;
+    padding: 1rem;
+
+    text-align: center;
+
+    @media (width >= 768px) {
+      top: 0;
+      right: 55%;
+    }
 
     &::before,
     &::after {
-      content: '';
-      display: block;
       position: absolute;
+      display: block;
+      content: '';
     }
 
     &::before {
       inset: 0;
+      background: #181b56;
       transform: rotate(4deg) scale(1.2);
-      @media (min-width: 768px) {
+
+      @media (width >= 768px) {
         transform: rotate(5deg) scale(1.15);
       }
-      background: #181b56;
     }
 
     &::after {
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 10px solid #181b56;
       right: 10%;
       bottom: 64%;
+
+      border-top: 10px solid transparent;
+      border-right: 10px solid #181b56;
+      border-bottom: 10px solid transparent;
+
       transform: rotate(276deg) scale(20);
-      @media (min-width: 768px) {
+
+      @media (width >= 768px) {
         right: 3rem;
         bottom: 25%;
         transform: rotate(7deg) scale(20);
@@ -103,32 +108,39 @@
 
   .logo {
     max-width: 230px;
-    @media (min-width: 768px) {
+
+    @media (width >= 768px) {
       max-width: none;
     }
   }
 
   h3 {
-    font-size: 1.5rem;
     margin-top: 1rem;
-    @media (min-width: 768px) {
-      font-size: 2rem;
+    font-size: 1.5rem;
+
+    @media (width >= 768px) {
       margin-top: 4rem;
+      font-size: 2rem;
     }
   }
 
   .img-landing {
     position: absolute;
-    z-index: 0;
-    width: 479px;
-    left: 50%;
     bottom: 0%;
+    left: 50%;
+    z-index: 0;
+
+    width: 479px;
+
     transform: translate(-53%, 0);
-    @media (min-width: 768px) {
-      margin-right: 0;
+
+    @media (width >= 768px) {
       top: 15%;
-      left: auto;
       right: 5%;
+      left: auto;
+
+      margin-right: 0;
+
       transform: scale(1.3);
     }
   }

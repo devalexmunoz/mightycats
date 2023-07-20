@@ -4,7 +4,7 @@
   import { getAuthUser, updateAuthUserProps } from '@/Utils/Auth'
   import { useMightyCatNftModule } from '@/Modules/MightyCatNftModule'
   import { useCustodialAccountModule } from '@/Modules/CustodialAccountModule'
-  import AnimatedDialog from '@/Components/AnimatedDialog.vue'
+  import AnimatedDialog from '@/Components/Onboarding/AnimatedDialog.vue'
   import ErrorModal from '@/Components/ErrorModal.vue'
 
   /* Image assets */

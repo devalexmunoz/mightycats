@@ -4,7 +4,7 @@
   import { useUserNftModule } from '@/Modules/UserNftModule'
   import { formatSerial } from '@/Utils/NftData'
   import MightyCat from '@/Components/MightyCat.vue'
-  import AnimatedDialog from '@/Components/AnimatedDialog.vue'
+  import AnimatedDialog from '@/Components/Onboarding/AnimatedDialog.vue'
 
   /* Image assets */
   import iconFemale from '@img/icons/icon-female.svg?raw'

@@ -2,7 +2,7 @@
   import { ref } from 'vue'
   import { Head, router } from '@inertiajs/vue3'
   import BaseModal from '@/Components/BaseModal.vue'
-  import AnimatedDialog from '@/Components/AnimatedDialog.vue'
+  import AnimatedDialog from '@/Components/Onboarding/AnimatedDialog.vue'
 
   /* Image assets */
   import imgOnboarding from '@img/onboarding/img-onboarding-start.png'
