@@ -57,7 +57,7 @@
     padding: 1rem;
 
     position: absolute;
-    top: 5rem;
+    top: 1.5rem;
     @media (min-width: 768px) {
       top: 3rem;
     }

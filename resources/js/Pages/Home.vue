@@ -35,9 +35,9 @@
 <template>
   <Head title="Home" />
   <div class="container" :style="`--background-image: url(${imgBackground})`">
-    <Navbar />
-
     <MightyCatInfoCard />
+
+    <Navbar />
 
     <div id="action-container"></div>
 
