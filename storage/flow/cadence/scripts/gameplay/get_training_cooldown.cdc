@@ -4,8 +4,6 @@ pub fun main(address: Address): AnyStruct? {
     let userGameplay = MightyCatsGame.usersGameplay[address]
             ?? panic("User gameplay does not exist")
 
-    let lastActivitiesCount = userGameplay.lastActivitiesTimestamps?.length ?? 0
-
     var lastActivitiesTimestamps = userGameplay.lastActivitiesTimestamps
     let maxLength = Int(MightyCatsGame.activitiesPerCooldown!)
 
