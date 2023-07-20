@@ -143,25 +143,30 @@ input {
   font-family: inherit;
   font-size: inherit;
 
-  background: var(--btn-background-color);
   border: 0;
 
   cursor: pointer;
   user-select: none;
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
-    background: var(--btn-hover-background-color);
-  }
-
-  &:active {
-    background: var(--btn-active-background-color);
-  }
-
   &[disabled] {
     opacity: 0.5;
     pointer-events: none;
+  }
+}
+
+.btn-default{
+  box-shadow: 0 5px #D7FFFF;
+
+  background: var(--btn-background-color);
+
+  &:hover,
+  &:focus{
+    text-decoration: none;
+    background: #EFF;
+  }
+
+  &:active{
+    background: #E6FBFF;
   }
 }
 

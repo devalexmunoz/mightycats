@@ -42,13 +42,13 @@
         </strong>
       </div>
       <div>
-        <button class="btn" disabled>
+        <button class="btn btn-default" disabled>
           Connect your Flow Wallet
           <small>(Coming soon)</small>
         </button>
       </div>
       <div>
-        <button class="btn" @click="logout">Log out</button>
+        <button class="btn btn-default" @click="logout">Log out</button>
       </div>
     </div>
   </BaseModal>

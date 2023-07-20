@@ -19,7 +19,9 @@
     <nav class="navbar">
       <div></div>
       <div>
-        <a href="#" class="btn" @click.prevent="openLoginModal">Login</a>
+        <a href="#" class="btn btn-default" @click.prevent="openLoginModal"
+          >Login</a
+        >
       </div>
     </nav>
 

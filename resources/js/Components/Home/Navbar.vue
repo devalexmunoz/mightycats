@@ -15,7 +15,7 @@
   <nav class="navbar">
     <div></div>
     <div>
-      <button class="btn" @click="showSettingsModal">
+      <button class="btn btn-default" @click="showSettingsModal">
         <img class="icon" :src="iconSettings" />
       </button>
     </div>

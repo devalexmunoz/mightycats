@@ -64,6 +64,7 @@
 
     background: var(--color-white);
     border-radius: 1rem 0.25rem 1rem 0.25rem;
+    box-shadow: 0 5px #d7ffff;
 
     color: #2d86fe;
 
