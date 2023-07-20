@@ -2,7 +2,7 @@
   import { ref, computed, onMounted } from 'vue'
   import { Head, usePage } from '@inertiajs/vue3'
   import { useFeedingModule } from '@/Modules/FeedingModule'
-  import { logout } from '@/Utils/Auth'
+  import Navbar from '@/Components/Home/Navbar.vue'
   import MightyCatInfoCard from '@/Components/Home/MightyCatInfoCard.vue'
   import MightyCat from '@/Components/MightyCat.vue'
   import FoodBowl from '@/Components/Items/FoodBowl.vue'
@@ -35,12 +35,7 @@
 <template>
   <Head title="Home" />
   <div class="container" :style="`--background-image: url(${imgBackground})`">
-    <nav class="navbar">
-      <div></div>
-      <div>
-        <a href="#" class="btn" @click.prevent="logout">Log out</a>
-      </div>
-    </nav>
+    <Navbar />
 
     <MightyCatInfoCard />
 
