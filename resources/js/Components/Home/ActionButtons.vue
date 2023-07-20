@@ -23,8 +23,15 @@
     position: absolute;
     bottom: 0;
     margin-bottom: 1.5rem;
-    @media (min-width: 768px) {
+
+    @media (width >= 768px) {
       margin-bottom: 4rem;
+    }
+
+    white-space: nowrap;
+
+    @media (width <= 359px) {
+      transform: scale(0.9);
     }
 
     :deep(.btn-primary) {
