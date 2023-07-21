@@ -52,32 +52,37 @@
 
 <style lang="scss" scoped>
   #mighty-info-card {
+    position: absolute;
+    top: 1.5rem;
+
     width: 90vw;
     max-width: 500px;
     padding: 1rem;
 
-    position: absolute;
-    top: 1.5rem;
-    @media (min-width: 768px) {
-      top: 3rem;
-    }
+    color: #2d86fe;
 
     background: var(--color-white);
-    border-radius: 1rem 0.25rem 1rem 0.25rem;
+    border-radius: 1rem 0.25rem;
     box-shadow: 0 5px #d7ffff;
 
-    color: #2d86fe;
+    @media (width >= 768px) {
+      top: 3rem;
+    }
 
     .serial {
       position: absolute;
       top: 0;
+
       display: inline-block;
-      background: #5cdbf8;
-      color: var(--color-white);
-      font-weight: bold;
-      margin-top: -1rem;
+
       padding: 0.5rem 1rem;
-      border-radius: 1rem 0 1rem 0;
+      margin-top: -1rem;
+
+      font-weight: bold;
+      color: var(--color-white);
+
+      background: #5cdbf8;
+      border-radius: 1rem 0;
     }
 
     .info-row {
@@ -88,13 +93,14 @@
 
       .nickname {
         padding-right: 0.5rem;
-        color: #2e39ac;
         margin-bottom: 0;
+        color: #2e39ac;
       }
 
       .icon-female {
         color: #a073ff;
       }
+
       .icon-male {
         color: #5cdbf8;
       }

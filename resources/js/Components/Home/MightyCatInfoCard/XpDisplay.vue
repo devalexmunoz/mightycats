@@ -79,8 +79,8 @@
 <style lang="scss" scoped>
   h3 {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
     margin-bottom: 0;
   }
 
@@ -90,9 +90,10 @@
   }
 
   .xp-count {
-    color: #2e39ac;
     margin-left: 0.25rem;
+    color: #2e39ac;
   }
+
   .xp-label {
     font-weight: bold;
   }

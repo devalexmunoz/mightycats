@@ -38,23 +38,22 @@
 
 <style lang="scss" scoped>
   p {
-    text-align: center;
     font-size: 1.25rem;
     font-weight: bold;
+    text-align: center;
   }
 
   .img-mighty-cat-activity {
-    width: 350px;
-
     position: absolute;
     bottom: 0;
     z-index: 1;
+    width: 350px;
   }
 
   .mighty-cat-container.activity-done {
-    width: 220px;
     position: absolute;
     bottom: 6rem;
     z-index: 1;
+    width: 220px;
   }
 </style>

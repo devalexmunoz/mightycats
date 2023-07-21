@@ -1,0 +1,60 @@
+:root {
+  /* hex color definitions */
+  --color-white: #fff;
+  --color-dark-gray: #222;
+  --color-yellow: #f7fd06;
+  --color-green: #19db0c;
+  --color-red: #ff4242;
+  --color-blue: #2d86fe;
+
+  /* hsl color definitions, useful for native css manipulation (darken, lighten) */
+  --color-white-hs: 0, 0%;
+  --color-white-l: 100%;
+  --color-light-blue-hs: 191, 92%;
+  --color-light-blue-l: 67%;
+  --color-light-yellow-hs: 50, 100%;
+  --color-light-yellow-l: 75%;
+  --color-red-hs: 0, 100%;
+  --color-red-l: 63%;
+
+  /* semantic color variables for this project */
+  --background-color: var(--color-dark-gray);
+  --text-color: var(--color-white);
+  --text-color-dark: var(--color-dark-gray);
+  --box-border-color: var(--color-white);
+  --success-color: var(--color-green);
+  --error-color: var(--color-red);
+  --btn-background-color: var(--color-white);
+  --btn-hover-background-color: hsl(
+    var(--color-white-hs),
+    calc(var(--color-white-l) - 7.5%)
+  );
+  --btn-active-background-color: hsl(
+    var(--color-white-hs),
+    calc(var(--color-white-l) - 15%)
+  );
+  --btn-blue-hover-background-color: hsl(
+    var(--color-light-blue-hs),
+    calc(var(--color-light-blue-l) - 7.5%)
+  );
+  --btn-blue-active-background-color: hsl(
+    var(--color-light-blue-hs),
+    calc(var(--color-light-blue-l) - 15%)
+  );
+  --btn-yellow-hover-background-color: hsl(
+    var(--color-light-yellow-hs),
+    calc(var(--color-light-yellow-l) - 7.5%)
+  );
+  --btn-yellow-active-background-color: hsl(
+    var(--color-light-yellow-hs),
+    calc(var(--color-light-yellow-l) - 15%)
+  );
+  --btn-red-hover-background-color: hsl(
+    var(--color-red-hs),
+    calc(var(--color-red-l) - 7.5%)
+  );
+  --btn-red-active-background-color: hsl(
+    var(--color-red-hs),
+    calc(var(--color-red-l) - 15%)
+  );
+}

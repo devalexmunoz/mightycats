@@ -387,6 +387,7 @@ module.exports = {
     'stylelint-config-standard-scss',
     'stylelint-config-standard-vue/scss',
   ],
+  ignoreFiles: ['resources/css/colors.scss'],
   rules: {
     'declaration-empty-line-before': null,
     'font-family-no-missing-generic-family-keyword': null,

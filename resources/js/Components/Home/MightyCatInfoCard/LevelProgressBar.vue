@@ -17,9 +17,10 @@
   .level-progress {
     width: 100%;
     height: 1.5rem;
+    padding: 0.25rem;
+
     background: #d7ffff;
     border-radius: 1rem;
-    padding: 0.25rem;
 
     .progress-bar {
       max-width: 100%;

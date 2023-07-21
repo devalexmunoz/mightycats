@@ -98,21 +98,23 @@
 
 <style lang="scss" scoped>
   .container {
-    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
     overflow: hidden;
+    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
 
     &::after {
-      content: '';
-      display: block;
-
-      border-top: solid 3px #1d36a6;
-      background: linear-gradient(180deg, #ff70a8 0%, #bf36ff 100%);
-
       position: absolute;
+      right: 0;
       bottom: 0;
       left: 0;
-      right: 0;
+
+      display: block;
+
       height: 30%;
+
+      background: linear-gradient(180deg, #ff70a8 0%, #bf36ff 100%);
+      border-top: solid 3px #1d36a6;
+
+      content: '';
     }
   }
 </style>

@@ -75,8 +75,8 @@
   }
 
   .container {
-    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
     overflow: hidden;
+    background: linear-gradient(173deg, #3645da 0%, #6d2eac 100%);
   }
 
   .img-random {
