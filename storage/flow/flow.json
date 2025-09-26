@@ -33,13 +33,6 @@
         "testnet": "0x9a0766d93b6608b7"
       }
     },
-    "LinkedAccounts": {
-      "source": "./cadence/contracts/LinkedAccounts.cdc",
-      "aliases": {
-        "emulator": "0xf8d6e0586b0a20c7",
-        "testnet": "0x1b655847a90e644a"
-      }
-    },
     "MetadataViews": {
       "source": "./cadence/contracts/MetadataViews.cdc",
       "aliases": {
