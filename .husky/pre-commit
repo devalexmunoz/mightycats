@@ -1,4 +1,16 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
+set -e # Essential: exit if any command fails
 
-docker compose exec $APP_SERVICE npx lint-staged
+# Attempt to source .env from project root if APP_SERVICE isn't already set
+if [ -z "$APP_SERVICE" ] && [ -f "$(dirname "$0")/../.env" ]; then
+  set -a; . "$(dirname "$0")/../.env"; set +a
+fi
+
+# Exit with an error if APP_SERVICE is still not set
+if [ -z "$APP_SERVICE" ]; then
+  echo "Error: APP_SERVICE not set. Check environment or project .env file." >&2
+  exit 1
+fi
+
+# Run lint-staged in Docker
+docker compose exec -T "$APP_SERVICE" npx --no-install -- lint-staged
