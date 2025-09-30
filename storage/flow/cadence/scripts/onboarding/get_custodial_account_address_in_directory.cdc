@@ -9,7 +9,7 @@ import "CustodialAccountDirectory"
 /// @return True if the key is active on the account, false otherwise (including if the given public key string was
 /// invalid)
 ///
-pub fun isKeyActiveOnAccount(publicKey: String, address: Address): Bool {
+access(all) fun isKeyActiveOnAccount(publicKey: String, address: Address): Bool {
     // Public key strings must have even length
     if publicKey.length % 2 == 0 {
         var keyIndex = 0
@@ -34,21 +34,22 @@ pub fun isKeyActiveOnAccount(publicKey: String, address: Address): Bool {
 /// Returns the child address associated with a public key if account was created by the AccountCreator.Creator at the
 /// specified Address and the provided public key is still active on the account.
 ///
-pub fun main(adminAddress: Address, publicKey: String): Address? {
+access(all) view fun main(adminAddress: Address, publicKey: String): Address? {
     let account = getAccount(adminAddress)
 
-    if let directoryRef = getAccount(adminAddress)
-        .getCapability<&CustodialAccountDirectory.Directory{CustodialAccountDirectory.DirectoryPublic}>(
+    let cap = account
+        .capabilities.get<&CustodialAccountDirectory.Directory>(
             CustodialAccountDirectory.DirectoryPublicPath
         )
-        .borrow() {
+
+    if let directoryRef = cap.borrow<&{CustodialAccountDirectory.DirectoryPublic}>() {
         if let address = directoryRef.getAddressFromPublicKey(publicKey: publicKey) {
             // Also check that the given key has not been revoked
             if isKeyActiveOnAccount(publicKey: publicKey, address: address) {
                 return address
             }
         }
-        return nil
     }
+
     return nil
 }

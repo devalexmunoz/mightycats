@@ -2,20 +2,20 @@ import "NonFungibleToken"
 import "MetadataViews"
 import "MightyCat"
 
-pub struct MightyCatNft {
-    pub let version: UInt64
-    pub let nickname: String
-    pub let gender: String
-    pub let about: String
+access(all) struct MightyCatNft {
+    access(all) let version: UInt64
+    access(all) let nickname: String
+    access(all) let gender: String
+    access(all) let about: String
 
-    pub let xp: UInt64
-    pub let level: UInt8
-    pub let levelProgress: UInt64
+    access(all) let xp: UInt64
+    access(all) let level: UInt8
+    access(all) let levelProgress: UInt64
 
-    pub let thumbnail: String
-    pub let itemID: UInt64
-    pub let resourceID: UInt64
-    pub let owner: Address
+    access(all) let thumbnail: String
+    access(all) let itemID: UInt64
+    access(all) let resourceID: UInt64
+    access(all) let owner: Address
 
     init(
         version: UInt64,
@@ -48,36 +48,36 @@ pub struct MightyCatNft {
     }
 }
 
-pub fun main(address: Address, itemID: UInt64): MightyCatNft? {
+access(all) fun main(address: Address, itemID: UInt64): MightyCatNft? {
     let account = getAccount(address)
 
-    let collectionRef = account.getCapability(MightyCat.CollectionPublicPath)!.borrow<&{NonFungibleToken.CollectionPublic}>()
-        ?? panic("Could not borrow capability from public collection")
+    let collectionCap = account.capabilities
+        .get<&MightyCat.Collection>(MightyCat.CollectionPublicPath)
 
-    if let collection = account
-        .getCapability<&MightyCat.Collection{NonFungibleToken.CollectionPublic, MightyCat.MightyCatCollectionPublic}>(MightyCat.CollectionPublicPath)
-        .borrow() {
-        if let item = collection.borrowMightyCat(id: itemID) {
-            if let view = item.resolveView(Type<MetadataViews.Display>()) {
-                let display = view as! MetadataViews.Display
-                let owner: Address = item.owner!.address!
-                let thumbnail = display.thumbnail as! MetadataViews.HTTPFile
+    if let collection = collectionCap.borrow<&{NonFungibleToken.CollectionPublic}>() {
 
-                return MightyCatNft(
-                    version: item.version,
-                    nickname: item.nickname,
-                    gender: item.gender,
-                    about: item.about,
+        if let nft = collection.borrowNFT(id: itemID) {
 
-                    xp: item.xp,
-                    level: item.level(),
-                    levelProgress: item.levelProgress(),
+            if let mightyCat = nft as? &MightyCat.NFT {
 
-                    thumbnail: thumbnail.url,
-                    itemID: itemID,
-                    resourceID: item.uuid,
-                    owner: address,
-                )
+                if let view = mightyCat.resolveView(Type<MetadataViews.Display>()) {
+                    let display = view as! MetadataViews.Display
+                    let thumbnail = display.thumbnail as! MetadataViews.HTTPFile
+
+                    return MightyCatNft(
+                        version: mightyCat.version,
+                        nickname: mightyCat.nickname,
+                        gender: mightyCat.gender,
+                        about: mightyCat.about,
+                        xp: mightyCat.xp,
+                        level: mightyCat.level(),
+                        levelProgress: mightyCat.levelProgress(),
+                        thumbnail: thumbnail.url,
+                        itemID: itemID,
+                        resourceID: mightyCat.uuid,
+                        owner: address
+                    )
+                }
             }
         }
     }

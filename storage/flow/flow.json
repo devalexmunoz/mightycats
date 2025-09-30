@@ -89,5 +89,31 @@
     "mainnet": "access.mainnet.nodes.onflow.org:9000",
     "sandboxnet": "access.sandboxnet.nodes.onflow.org:9000",
     "testnet": "access.devnet.nodes.onflow.org:9000"
+  },
+  "accounts": {
+    "emulator-account": {
+      "address": "f8d6e0586b0a20c7",
+      "key": "df002713f06c374c435501815b677a835a513c1c87747833a6e0c62391054363"
+    },
+    "admin-account": {
+      "address": "f8d6e0586b0a20c7",
+      "key": "df002713f06c374c435501815b677a835a513c1c87747833a6e0c62391054363"
+    }
+  },
+  "deployments": {
+    "emulator": {
+      "admin-account": [
+        "MightyCat",
+        "MightyCatsGame",
+        "CustodialAccountDirectory"
+      ]
+    },
+    "testnet": {
+      "admin-account": [
+        "MightyCat",
+        "MightyCatsGame",
+        "CustodialAccountDirectory"
+      ]
+    }
   }
 }

@@ -4,27 +4,27 @@
 *
 */
 
-pub contract MightyCatsGame {
+access(all) contract MightyCatsGame {
 
     // Types of MightyItems in existence
-    pub let activities: {UInt64: Activity}
-    pub var totalActivitiesCreated: UInt64
+    access(all) let activities: {UInt64: Activity}
+    access(all) var totalActivitiesCreated: UInt64
 
-    pub let usersGameplay: {Address : Gameplay}
+    access(all) let usersGameplay: {Address : Gameplay}
 
-    pub let feedingXp: UInt64
-    pub let activitiesPerCooldown: UInt8
-    pub let activitiesCooldown: UFix64
-    pub let feedingCooldown: UFix64
+    access(all) let feedingXp: UInt64
+    access(all) let activitiesPerCooldown: UInt8
+    access(all) let activitiesCooldown: UFix64
+    access(all) let feedingCooldown: UFix64
 
-    pub let AdminStoragePath: StoragePath
+    access(all) let AdminStoragePath: StoragePath
 
-    pub event ContractInitialized()
+    access(all) event ContractInitialized()
 
 
-    pub struct Gameplay {
-        pub var lastFedTimestamp: UFix64?
-        pub var lastActivitiesTimestamps: [UFix64]?
+    access(all) struct Gameplay {
+        access(all) var lastFedTimestamp: UFix64?
+        access(all) var lastActivitiesTimestamps: [UFix64]?
 
         init(
             lastFedTimestamp: UFix64?,
@@ -34,7 +34,7 @@ pub contract MightyCatsGame {
             self.lastActivitiesTimestamps = lastActivitiesTimestamps
         }
 
-         pub fun updateLastActivitiesTimestamps(lastActivityTimestamp: UFix64): Gameplay {
+         access(all) fun updateLastActivitiesTimestamps(lastActivityTimestamp: UFix64): Gameplay {
             let maxLength = Int(MightyCatsGame.activitiesPerCooldown)
 
             if(self.lastActivitiesTimestamps == nil){
@@ -51,19 +51,19 @@ pub contract MightyCatsGame {
             return self
         }
 
-        pub fun updateLastFedTimestamp(lastFedTimestamp: UFix64?): Gameplay {
+        access(all) fun updateLastFedTimestamp(lastFedTimestamp: UFix64?): Gameplay {
             self.lastFedTimestamp = lastFedTimestamp
             return self
         }
     }
 
-    pub struct Activity {
+    access(all) struct Activity {
         // The unique ID of the Activity
-        pub let id: UInt64
+        access(all) let id: UInt64
 
         // Activity metadata
-        pub let name: String
-        pub let xp: UInt64
+        access(all) let name: String
+        access(all) let xp: UInt64
 
         init(
             id: UInt64,
@@ -76,8 +76,8 @@ pub contract MightyCatsGame {
         }
     }
 
-    pub resource Admin {
-        pub fun createActivity(
+    access(all) resource Admin {
+        access(all) fun createActivity(
             name: String,
             xp: UInt64,
         ) {
@@ -92,7 +92,7 @@ pub contract MightyCatsGame {
             MightyCatsGame.totalActivitiesCreated = MightyCatsGame.totalActivitiesCreated + UInt64(1)
         }
 
-        pub fun createUserGameplay(user: Address) {
+        access(all) fun createUserGameplay(user: Address) {
             var userGameplay = Gameplay(
                 lastFedTimestamp: nil,
                 lastActivitiesTimestamps: nil,
@@ -101,7 +101,7 @@ pub contract MightyCatsGame {
             MightyCatsGame.usersGameplay[user] = userGameplay
         }
 
-        pub fun updateUserGameplayLastActivitiesTimestamps(user: Address, lastActivityTimestamp: UFix64)
+        access(all) fun updateUserGameplayLastActivitiesTimestamps(user: Address, lastActivityTimestamp: UFix64)
         {
             var userGameplay = MightyCatsGame.usersGameplay[user]!
 
@@ -110,7 +110,7 @@ pub contract MightyCatsGame {
             MightyCatsGame.usersGameplay.insert(key:user, userGameplay)
         }
 
-        pub fun updateUserGameplayLastFedTimestamp(user: Address, lastFedTimestamp: UFix64?) {
+        access(all) fun updateUserGameplayLastFedTimestamp(user: Address, lastFedTimestamp: UFix64?) {
             var userGameplay = MightyCatsGame.usersGameplay[user]!
 
             userGameplay.updateLastFedTimestamp(lastFedTimestamp: lastFedTimestamp)
@@ -135,7 +135,7 @@ pub contract MightyCatsGame {
 
         // Create an Admin resource and save it to storage
         let admin <- create Admin()
-        self.account.save(<-admin, to: self.AdminStoragePath)
+        self.account.storage.save(<-admin, to: self.AdminStoragePath)
 
         emit ContractInitialized()
     }

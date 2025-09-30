@@ -1,18 +1,20 @@
 import "MightyCatsGame"
 import "MightyCat"
+import "NonFungibleToken"
 
-pub fun main(address: Address, itemID: UInt64, activityID: UInt64): AnyStruct? {
+access(all) view fun main(address: Address, itemID: UInt64, activityID: UInt64): AnyStruct? {
     let userGameplay = MightyCatsGame.usersGameplay[address]
-            ?? panic("User gameplay does not exist")
+        ?? panic("User gameplay does not exist")
 
-    let collection = getAccount(address)
-        .getCapability(MightyCat.CollectionPublicPath)
-        .borrow<&{MightyCat.MightyCatCollectionPublic}>()
+    let collectionCapability = getAccount(address)
+        .capabilities.get<&MightyCat.Collection>(
+            MightyCat.CollectionPublicPath
+        )
+
+    let collection = collectionCapability.borrow<&{NonFungibleToken.CollectionPublic}>()
         ?? panic("Could not borrow a reference to the collection")
 
-    let mightyCat = collection.borrowMightyCat(id: itemID)!
-
-    let activity = MightyCatsGame.activities[activityID]!
+    let mightyCat = collection.borrowNFT(id: itemID) as! &MightyCat.NFT
 
     return {
         "last_activities_timestamps": userGameplay.lastActivitiesTimestamps,

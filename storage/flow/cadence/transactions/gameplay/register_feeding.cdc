@@ -24,30 +24,31 @@ transaction(
     let initialXp: UInt64
 
 
-    prepare(adminAccount: AuthAccount) {
+    prepare(adminAccount: auth(Storage) &Account) {
 
-         // Borrow a reference to the NFTMinter resource in storage
-        self.admin = adminAccount.borrow<&MightyCatsGame.Admin>(from: MightyCatsGame.AdminStoragePath)
+        // Borrow a reference to the NFTMinter resource in storage
+        self.admin = adminAccount.storage.borrow<&MightyCatsGame.Admin>(from: MightyCatsGame.AdminStoragePath)
             ?? panic("Could not borrow a reference to the Admin resource")
 
-        self.minter = adminAccount.borrow<&MightyCat.NFTMinter>(from: MightyCat.MinterStoragePath)
+        self.minter = adminAccount.storage.borrow<&MightyCat.NFTMinter>(from: MightyCat.MinterStoragePath)
             ?? panic("Could not borrow a reference to the Minter resource")
 
-        self.userGameplay = MightyCatsGame.usersGameplay[user] 
+        self.userGameplay = MightyCatsGame.usersGameplay[user]
             ?? panic("User gameplay does not exist")
 
         self.currentTimestamp = getCurrentBlock().timestamp
 
-        let collection = getAccount(user)
-        .getCapability(MightyCat.CollectionPublicPath)
-        .borrow<&{MightyCat.MightyCatCollectionPublic}>()
-        ?? panic("Could not borrow a reference to the collection")
+        let collectionCap = getAccount(user).capabilities.get<&MightyCat.Collection>(MightyCat.CollectionPublicPath)
+
+        let collection = collectionCap.borrow<&{NonFungibleToken.CollectionPublic}>()
+            ?? panic("Could not borrow a reference to the collection")
 
         let ids = collection.getIDs()
 
         let itemID =  ids[ids.length - 1]
-        
-        self.mightyCat = collection.borrowMightyCat(id: itemID)!
+
+        let nftRef = collection.borrowNFT(id: itemID) ?? panic("Could not borrow NFT reference")
+        self.mightyCat = nftRef as! &MightyCat.NFT
 
         self.initialXp = self.mightyCat.xp
     }
@@ -67,5 +68,5 @@ transaction(
 
     post {
         self.initialXp + MightyCatsGame.feedingXp == self.mightyCat.xp
-    } 
+    }
 }

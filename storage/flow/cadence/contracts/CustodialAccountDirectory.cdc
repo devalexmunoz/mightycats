@@ -1,25 +1,25 @@
-pub contract CustodialAccountDirectory {
+access(all) contract CustodialAccountDirectory {
 
     /* Canonical paths */
     //
-    pub let DirectoryStoragePath: StoragePath
-    pub let DirectoryPublicPath: PublicPath
+    access(all) let DirectoryStoragePath: StoragePath
+    access(all) let DirectoryPublicPath: PublicPath
 
     /* Events */
     //
-    pub event AccountStored(directoryAddress: Address?, directoryUUID: UInt64, storedAccount: Address, publicKey: String)
+    access(all) event AccountStored(directoryAddress: Address?, directoryUUID: UInt64, storedAccount: Address, publicKey: String)
 
     /* --- Directory --- */
     //
-    pub resource interface DirectoryPublic {
-        pub fun getAddressFromPublicKey(publicKey: String): Address?
-        pub fun getAllStoredAddresses(): [Address]
+    access(all) resource interface DirectoryPublic {
+        access(all) fun getAddressFromPublicKey(publicKey: String): Address?
+        access(all) fun getAllStoredAddresses(): [Address]
     }
 
     /// Anyone holding this resource can store new accounts, keeping a mapping of each account's originating public
     /// keys to their addresses.
     ///
-    pub resource Directory : DirectoryPublic {
+    access(all) resource Directory : DirectoryPublic {
 
         /// mapping of public_key: address
         access(self) let storedAccounts: {String: Address}
@@ -28,11 +28,11 @@ pub contract CustodialAccountDirectory {
             self.storedAccounts = {}
         }
 
-        pub fun getAddressFromPublicKey(publicKey: String): Address? {
+        access(all) view fun getAddressFromPublicKey(publicKey: String): Address? {
             return self.storedAccounts[publicKey]
         }
 
-        pub fun getAllStoredAddresses(): [Address] {
+        access(all) view fun getAllStoredAddresses(): [Address] {
             return self.storedAccounts.values
         }
 
@@ -45,7 +45,7 @@ pub contract CustodialAccountDirectory {
         ///
         /// @return true on success
         ///
-        pub fun storeNewAccount(
+        access(all) fun storeNewAccount(
             publicKey: String,
             accountAddress: Address
         ): Bool {
@@ -60,7 +60,7 @@ pub contract CustodialAccountDirectory {
         }
     }
 
-    pub fun createNewDirectory(): @Directory {
+    access(all) fun createNewDirectory(): @Directory {
         return <-create Directory()
     }
 

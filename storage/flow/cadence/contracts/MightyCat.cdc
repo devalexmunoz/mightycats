@@ -4,39 +4,45 @@
 *
 */
 
-import NonFungibleToken from "NonFungibleToken"
-import MetadataViews from "MetadataViews"
+import "NonFungibleToken"
+import "ViewResolver"
+import "MetadataViews"
 
-pub contract MightyCat: NonFungibleToken {
+access(all) contract MightyCat: NonFungibleToken {
 
     /// Total supply of MightyCats in existence
-    pub var totalSupply: UInt64
+    access(all) var totalSupply: UInt64
 
     /// Events
-    pub event ContractInitialized()
-    pub event Withdraw(id: UInt64, from: Address?)
-    pub event Deposit(id: UInt64, to: Address?)
+    access(all) event ContractInitialized()
+    access(all) event Withdraw(id: UInt64, from: Address?)
+    access(all) event Deposit(id: UInt64, to: Address?)
 
     /// Storage and Public Paths
-    pub let CollectionStoragePath: StoragePath
-    pub let CollectionPublicPath: PublicPath
-    pub let MinterStoragePath: StoragePath
+    access(all) let CollectionStoragePath: StoragePath
+    access(all) let CollectionPublicPath: PublicPath
+    access(all) let MinterStoragePath: StoragePath
 
     /// The core resource that represents a Non Fungible Token.
     /// New instances will be created using the NFTMinter resource
     /// and stored in the Collection resource
     ///
-    pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
+    access(all) resource NFT: NonFungibleToken.NFT, ViewResolver.Resolver {
 
         /// The unique ID of the NFT
-        pub let id: UInt64
+        access(all) let id: UInt64
+
+
 
         /// Metadata fields
-        pub let version: UInt64
-        pub let nickname: String
-        pub let gender: String
-        pub let about: String
-        pub var xp: UInt64
+        access(all) let name: String
+        access(all) let description: String
+        access(all) let thumbnail: String
+        access(all) let version: UInt64
+        access(all) let nickname: String
+        access(all) let gender: String
+        access(all) let about: String
+        access(all) var xp: UInt64
 
         access(self) let levelMap: {UInt8: UInt64}
 
@@ -44,6 +50,9 @@ pub contract MightyCat: NonFungibleToken {
 
         init(
             id: UInt64,
+            name: String,
+            description: String,
+            thumbnail: String,
             version: UInt64,
             nickname: String,
             gender: String,
@@ -51,6 +60,9 @@ pub contract MightyCat: NonFungibleToken {
             royalties: [MetadataViews.Royalty],
         ) {
             self.id = id
+            self.name = name
+            self.description = description
+            self.thumbnail = thumbnail
             self.version = version
             self.nickname = nickname
             self.gender = gender
@@ -66,21 +78,14 @@ pub contract MightyCat: NonFungibleToken {
             }
         }
 
-        pub fun name(): String {
-            return "Mighty Cat #"
-                .concat(self.id.toString())
+        /// createEmptyCollection creates an empty Collection
+        /// and returns it to the caller so that they can own NFTs
+        /// @{NonFungibleToken.Collection}
+        access(all) fun createEmptyCollection(): @{NonFungibleToken.Collection} {
+            return <- MightyCat.createEmptyCollection(nftType: Type<@MightyCat.NFT>())
         }
 
-        pub fun description(): String {
-           return "Mighty Cat with serial number #"
-                .concat(self.id.toString())
-        }
-
-        pub fun thumbnail(): MetadataViews.HTTPFile {
-          return MetadataViews.HTTPFile(url: "http://localhost/storage/app/nft/".concat(self.version.toString()))
-        }
-
-        pub fun level(): UInt8 {
+        access(all) fun level(): UInt8 {
             let levelMap = self.levelMap
             let xp = self.xp
 
@@ -98,7 +103,7 @@ pub contract MightyCat: NonFungibleToken {
             return level
         }
 
-        pub fun levelProgress(): UInt64  {
+        access(all) fun levelProgress(): UInt64  {
             let level = self.level()
             // NFT has reached maximum level
             if(!self.levelMap.containsKey(level + 1)){
@@ -122,7 +127,7 @@ pub contract MightyCat: NonFungibleToken {
         ///
         /// @return An array of Types defining the implemented views.
         ///
-        pub fun getViews(): [Type] {
+        access(all) view fun getViews(): [Type] {
             return [
                 Type<MetadataViews.Display>(),
                 Type<MetadataViews.Royalties>(),
@@ -140,13 +145,18 @@ pub contract MightyCat: NonFungibleToken {
         /// @param view: The Type of the desired view.
         /// @return A structure representing the requested view.
         ///
-        pub fun resolveView(_ view: Type): AnyStruct? {
+        access(all) fun resolveView(_ view: Type): AnyStruct? {
             switch view {
                 case Type<MetadataViews.Display>():
+                    let name = "Mighty Cat #".concat(self.id.toString())
+                    let description = "Mighty Cat with serial number #".concat(self.id.toString())
+
+                    let thumbnailURL = "http://localhost/storage/app/nft/".concat(self.version.toString())
+                    let thumbnail = MetadataViews.HTTPFile(url: thumbnailURL)
                     return MetadataViews.Display(
-                        name: self.name(),
-                        description: self.description(),
-                        thumbnail: self.thumbnail(),
+                        name: name,
+                        description: description,
+                        thumbnail: thumbnail
                     )
                 case Type<MetadataViews.Editions>():
                     let editionInfo = MetadataViews.Edition(name: "Mighty Cats", number: self.id, max: nil)
@@ -165,17 +175,7 @@ pub contract MightyCat: NonFungibleToken {
                 case Type<MetadataViews.ExternalURL>():
                     return MetadataViews.ExternalURL("https://mightycats.io/cat/".concat(self.id.toString()))
                 case Type<MetadataViews.NFTCollectionData>():
-                    return MetadataViews.NFTCollectionData(
-                        storagePath: MightyCat.CollectionStoragePath,
-                        publicPath: MightyCat.CollectionPublicPath,
-                        providerPath: /private/MightyCatCollection,
-                        publicCollection: Type<&MightyCat.Collection{MightyCat.MightyCatCollectionPublic}>(),
-                        publicLinkedType: Type<&MightyCat.Collection{MightyCat.MightyCatCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Receiver,MetadataViews.ResolverCollection}>(),
-                        providerLinkedType: Type<&MightyCat.Collection{MightyCat.MightyCatCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Provider,MetadataViews.ResolverCollection}>(),
-                        createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {
-                            return <-MightyCat.createEmptyCollection()
-                        })
-                    )
+                    return MightyCat.resolveContractView(resourceType: Type<@MightyCat.NFT>(), viewType: Type<MetadataViews.NFTCollectionData>())
                 case Type<MetadataViews.NFTCollectionDisplay>():
                     let media = MetadataViews.Media(
                         file: MetadataViews.HTTPFile(
@@ -210,30 +210,29 @@ pub contract MightyCat: NonFungibleToken {
         }
     }
 
-    /// Defines the methods that are particular to this NFT contract collection
-    ///
-    pub resource interface MightyCatCollectionPublic {
-        pub fun deposit(token: @NonFungibleToken.NFT)
-        pub fun getIDs(): [UInt64]
-        pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-        pub fun borrowMightyCat(id: UInt64): &MightyCat.NFT? {
-            post {
-                (result == nil) || (result?.id == id):
-                    "Cannot borrow MightyCat reference: the ID of the returned reference is incorrect"
-            }
-        }
-    }
-
     /// The resource that will be holding the NFTs inside any account.
     /// In order to be able to manage NFTs any account will need to create
     /// an empty collection first
     ///
-    pub resource Collection: MightyCatCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
+   access(all) resource Collection: NonFungibleToken.Collection, ViewResolver.ResolverCollection {
         // Dictionary of NFT conforming tokens
-        pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
+        access(all) var ownedNFTs: @{UInt64: {NonFungibleToken.NFT}}
 
         init () {
             self.ownedNFTs <- {}
+        }
+
+        /// getSupportedNFTTypes returns a list of NFT types that this receiver accepts
+        access(all) view fun getSupportedNFTTypes(): {Type: Bool} {
+            let supportedTypes: {Type: Bool} = {}
+            supportedTypes[Type<@MightyCat.NFT>()] = true
+            return supportedTypes
+        }
+
+        /// Returns whether or not the given type is accepted by the collection
+        /// A collection that can accept any type should just return true by default
+        access(all) view fun isSupportedNFTType(type: Type): Bool {
+            return type == Type<@MightyCat.NFT>()
         }
 
         /// Removes an NFT from the collection and moves it to the caller
@@ -241,7 +240,8 @@ pub contract MightyCat: NonFungibleToken {
         /// @param withdrawID: The ID of the NFT that wants to be withdrawn
         /// @return The NFT resource that has been taken out of the collection
         ///
-        pub fun withdraw(withdrawID: UInt64): @NonFungibleToken.NFT {
+        access(NonFungibleToken.Withdraw) fun withdraw(withdrawID: UInt64): @{NonFungibleToken.NFT} {
+
             let token <- self.ownedNFTs.remove(key: withdrawID) ?? panic("missing NFT")
 
             emit Withdraw(id: token.id, from: self.owner?.address)
@@ -253,7 +253,7 @@ pub contract MightyCat: NonFungibleToken {
         ///
         /// @param token: The NFT resource to be included in the collection
         ///
-        pub fun deposit(token: @NonFungibleToken.NFT) {
+        access(all) fun deposit(token: @{NonFungibleToken.NFT}) {
             let token <- token as! @MightyCat.NFT
 
             let id: UInt64 = token.id
@@ -270,7 +270,7 @@ pub contract MightyCat: NonFungibleToken {
         ///
         /// @return An array containing the IDs of the NFTs in the collection
         ///
-        pub fun getIDs(): [UInt64] {
+        access(all) view fun getIDs(): [UInt64] {
             return self.ownedNFTs.keys
         }
 
@@ -280,24 +280,8 @@ pub contract MightyCat: NonFungibleToken {
         /// @param id: The ID of the wanted NFT
         /// @return A reference to the wanted NFT resource
         ///
-        pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
-            return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
-        }
-
-        /// Gets a reference to an NFT in the collection so that
-        /// the caller can read its metadata and call its methods
-        ///
-        /// @param id: The ID of the wanted NFT
-        /// @return A reference to the wanted NFT resource
-        ///
-        pub fun borrowMightyCat(id: UInt64): &MightyCat.NFT? {
-            if self.ownedNFTs[id] != nil {
-                // Create an authorized reference to allow downcasting
-                let ref = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-                return ref as! &MightyCat.NFT
-            }
-
-            return nil
+        access(all) view fun borrowNFT(_ id: UInt64): &{NonFungibleToken.NFT}? {
+            return &self.ownedNFTs[id]
         }
 
         /// Gets a reference to the NFT only conforming to the `{MetadataViews.Resolver}`
@@ -307,14 +291,18 @@ pub contract MightyCat: NonFungibleToken {
         /// @param id: The ID of the wanted NFT
         /// @return The resource reference conforming to the Resolver interface
         ///
-        pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
-            let nft = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-            let MightyCat = nft as! &MightyCat.NFT
-            return MightyCat as &AnyResource{MetadataViews.Resolver}
+        access(all) view fun borrowViewResolver(id: UInt64): &{ViewResolver.Resolver}? {
+            if let nft = &self.ownedNFTs[id] as &{NonFungibleToken.NFT}? {
+                return nft as &{ViewResolver.Resolver}
+            }
+            return nil
         }
 
-        destroy() {
-            destroy self.ownedNFTs
+        /// createEmptyCollection creates an empty Collection of the same type
+        /// and returns it to the caller
+        /// @return A an empty collection of the same type
+        access(all) fun createEmptyCollection(): @{NonFungibleToken.Collection} {
+            return <- MightyCat.createEmptyCollection(nftType: Type<@MightyCat.NFT>())
         }
     }
 
@@ -322,14 +310,14 @@ pub contract MightyCat: NonFungibleToken {
     ///
     /// @return The new Collection resource
     ///
-    pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+    access(all) fun createEmptyCollection(nftType: Type): @{NonFungibleToken.Collection} {
         return <- create Collection()
     }
 
     /// Resource that an admin or something similar would own to be
     /// able to mint new NFTs
     ///
-    pub resource NFTMinter {
+    access(all) resource NFTMinter {
 
         /// Mints a new NFT with a new ID and deposit it in the
         /// recipients collection using their collection reference
@@ -340,7 +328,10 @@ pub contract MightyCat: NonFungibleToken {
         /// @param thumbnail: The thumbnail for the NFT metadata
         /// @param royalties: An array of Royalty structs, see MetadataViews docs
         ///
-        pub fun mintNFT(
+        access(all) fun mintNFT(
+            name: String,
+            description: String,
+            thumbnail: String,
             version: UInt64,
             nickname: String,
             gender: String,
@@ -351,6 +342,9 @@ pub contract MightyCat: NonFungibleToken {
             // create a new NFT
             var newNFT <- create NFT(
                 id: MightyCat.totalSupply + UInt64(1),
+                name: name,
+                description: description,
+                thumbnail: thumbnail,
                 version: version,
                 nickname: nickname,
                 gender: gender,
@@ -364,7 +358,7 @@ pub contract MightyCat: NonFungibleToken {
             MightyCat.totalSupply = MightyCat.totalSupply + UInt64(1)
         }
 
-        pub fun updateMightyCatXp(
+        access(all) fun updateMightyCatXp(
             mightyCat: &MightyCat.NFT,
             xp: UInt64
         ) : UInt64 {
@@ -372,23 +366,33 @@ pub contract MightyCat: NonFungibleToken {
         }
     }
 
+    /// Function that returns all the Metadata Views implemented by a Non Fungible Token
+    ///
+    /// @return An array of Types defining the implemented views. This value will be used by
+    ///         developers to know which parameter to pass to the resolveView() method.
+    ///
+     access(all) view fun getContractViews(resourceType: Type?): [Type] {
+        return [
+            Type<MetadataViews.NFTCollectionData>(),
+            Type<MetadataViews.NFTCollectionDisplay>()
+        ]
+    }
+
     /// Function that resolves a metadata view for this contract.
     ///
     /// @param view: The Type of the desired view.
     /// @return A structure representing the requested view.
     ///
-    pub fun resolveView(_ view: Type): AnyStruct? {
-        switch view {
+    access(all) fun resolveContractView(resourceType: Type?, viewType: Type): AnyStruct? {
+        switch viewType {
             case Type<MetadataViews.NFTCollectionData>():
                 return MetadataViews.NFTCollectionData(
-                    storagePath: MightyCat.CollectionStoragePath,
-                    publicPath: MightyCat.CollectionPublicPath,
-                    providerPath: /private/MightyCatCollection,
-                    publicCollection: Type<&MightyCat.Collection{MightyCat.MightyCatCollectionPublic}>(),
-                    publicLinkedType: Type<&MightyCat.Collection{MightyCat.MightyCatCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Receiver,MetadataViews.ResolverCollection}>(),
-                    providerLinkedType: Type<&MightyCat.Collection{MightyCat.MightyCatCollectionPublic,NonFungibleToken.CollectionPublic,NonFungibleToken.Provider,MetadataViews.ResolverCollection}>(),
-                    createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {
-                        return <-MightyCat.createEmptyCollection()
+                    storagePath: self.CollectionStoragePath,
+                    publicPath: self.CollectionPublicPath,
+                    publicCollection: Type<&MightyCat.Collection>(),
+                    publicLinkedType: Type<&MightyCat.Collection>(),
+                    createEmptyCollectionFunction: (fun(): @{NonFungibleToken.Collection} {
+                        return <-MightyCat.createEmptyCollection(nftType: Type<@MightyCat.NFT>())
                     })
                 )
             case Type<MetadataViews.NFTCollectionDisplay>():
@@ -412,18 +416,6 @@ pub contract MightyCat: NonFungibleToken {
         return nil
     }
 
-    /// Function that returns all the Metadata Views implemented by a Non Fungible Token
-    ///
-    /// @return An array of Types defining the implemented views. This value will be used by
-    ///         developers to know which parameter to pass to the resolveView() method.
-    ///
-    pub fun getViews(): [Type] {
-        return [
-            Type<MetadataViews.NFTCollectionData>(),
-            Type<MetadataViews.NFTCollectionDisplay>()
-        ]
-    }
-
     init() {
         // Initialize the total supply
         self.totalSupply = 0
@@ -435,17 +427,15 @@ pub contract MightyCat: NonFungibleToken {
 
         // Create a Collection resource and save it to storage
         let collection <- create Collection()
-        self.account.save(<-collection, to: self.CollectionStoragePath)
+        self.account.storage.save(<-collection, to: self.CollectionStoragePath)
 
         // Create a public capability for the collection
-        self.account.link<&MightyCat.Collection{NonFungibleToken.CollectionPublic, MightyCat.MightyCatCollectionPublic, MetadataViews.ResolverCollection}>(
-            self.CollectionPublicPath,
-            target: self.CollectionStoragePath
-        )
+        let collectionCap = self.account.capabilities.storage.issue<&MightyCat.Collection>(self.CollectionStoragePath)
+        self.account.capabilities.publish(collectionCap, at: self.CollectionPublicPath)
 
         // Create a Minter resource and save it to storage
         let minter <- create NFTMinter()
-        self.account.save(<-minter, to: self.MinterStoragePath)
+        self.account.storage.save(<-minter, to: self.MinterStoragePath)
 
         emit ContractInitialized()
     }

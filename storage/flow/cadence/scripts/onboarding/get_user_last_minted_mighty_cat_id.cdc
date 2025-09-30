@@ -1,13 +1,17 @@
 import "NonFungibleToken"
 import "MightyCat"
 
-pub fun main(address: Address): UInt64? {
+access(all) view fun main(address: Address): UInt64? {
     let account = getAccount(address)
 
-    let collectionRef = account.getCapability(MightyCat.CollectionPublicPath)!.borrow<&{NonFungibleToken.CollectionPublic}>()
-        ?? panic("Could not borrow capability from public collection")
+    let collectionCap = account.capabilities
+        .get<&MightyCat.Collection>(MightyCat.CollectionPublicPath)
+
+    let collectionRef = collectionCap.borrow<&{NonFungibleToken.CollectionPublic}>()
+        ?? panic("Could not borrow a reference to the collection")
 
     let ids = collectionRef.getIDs()
 
+    // Preserving original logic
     return ids[ids.length - 1]
 }

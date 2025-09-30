@@ -1,5 +1,5 @@
 import "MightyCatsGame"
 
-pub fun main(): AnyStruct? {
+access(all) view fun main(): AnyStruct? {
     return MightyCatsGame.activities
 }

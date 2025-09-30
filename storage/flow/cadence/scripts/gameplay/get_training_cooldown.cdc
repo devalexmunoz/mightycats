@@ -1,11 +1,11 @@
 import "MightyCatsGame"
 
-pub fun main(address: Address): AnyStruct? {
+access(all) view fun main(address: Address): AnyStruct? {
     let userGameplay = MightyCatsGame.usersGameplay[address]
             ?? panic("User gameplay does not exist")
 
     var lastActivitiesTimestamps = userGameplay.lastActivitiesTimestamps
-    let maxLength = Int(MightyCatsGame.activitiesPerCooldown!)
+    let maxLength = Int(MightyCatsGame.activitiesPerCooldown)
 
     if(lastActivitiesTimestamps != nil){
         if(lastActivitiesTimestamps!.length > maxLength){

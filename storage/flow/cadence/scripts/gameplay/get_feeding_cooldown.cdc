@@ -1,6 +1,6 @@
 import "MightyCatsGame"
 
-pub fun main(address: Address): AnyStruct? {
+access(all) view fun main(address: Address): AnyStruct? {
     let userGameplay = MightyCatsGame.usersGameplay[address]
             ?? panic("User gameplay does not exist")
 

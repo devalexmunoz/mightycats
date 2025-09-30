@@ -15,35 +15,27 @@ transaction(
     publicKey: String,
     initialFundingAmount: UFix64,
 ) {
-    prepare(adminAccount: AuthAccount) {
+    prepare(adminAccount: auth(Storage, Capabilities, AccountCreator) &Account) {
         /* --- Fetch admin's account directory --- */
         //
         // Ensure resource is saved where expected
-        if adminAccount.type(at: CustodialAccountDirectory.DirectoryStoragePath) == nil {
-            adminAccount.save(
+        if adminAccount.storage.borrow<&CustodialAccountDirectory.Directory>(from: CustodialAccountDirectory.DirectoryStoragePath) == nil {
+            adminAccount.storage.save(
                 <-CustodialAccountDirectory.createNewDirectory(),
                 to: CustodialAccountDirectory.DirectoryStoragePath
             )
         }
         // Ensure public Capability is linked
-        if !adminAccount.getCapability<&CustodialAccountDirectory.Directory{CustodialAccountDirectory.DirectoryPublic}>(
-            CustodialAccountDirectory.DirectoryPublicPath).check() {
-            // Link the public Capability
-            adminAccount.unlink(CustodialAccountDirectory.DirectoryPublicPath)
-            adminAccount.link<&CustodialAccountDirectory.Directory{CustodialAccountDirectory.DirectoryPublic}>(
-                CustodialAccountDirectory.DirectoryPublicPath,
-                target: CustodialAccountDirectory.DirectoryStoragePath
-            )
+        if !adminAccount.capabilities.exists(CustodialAccountDirectory.DirectoryPublicPath) {
+            let cap = adminAccount.capabilities.storage.issue<&CustodialAccountDirectory.Directory>(CustodialAccountDirectory.DirectoryStoragePath)
+            adminAccount.capabilities.publish(cap, at: CustodialAccountDirectory.DirectoryPublicPath)
         }
         // Get a reference to the client's AccountDirectory.Directory
-        let directoryRef = adminAccount.borrow<&CustodialAccountDirectory.Directory>(
-                from: CustodialAccountDirectory.DirectoryStoragePath
-            ) ?? panic("No AccountDirectory in admin's account!")
+        let directoryRef = adminAccount.storage.borrow<&CustodialAccountDirectory.Directory>(from: CustodialAccountDirectory.DirectoryStoragePath)
+            ?? panic("No AccountDirectory in admin's account!")
 
-         // Borrow a reference to the Game Admin resource in storage
-        let gameAdminRef = adminAccount.borrow<&MightyCatsGame.Admin>(
-                from: MightyCatsGame.AdminStoragePath
-            ) ?? panic("Could not borrow a reference to the game admin resource")
+        let gameAdminRef = adminAccount.storage.borrow<&MightyCatsGame.Admin>(from: MightyCatsGame.AdminStoragePath)
+            ?? panic("Could not borrow a reference to the game admin resource")
 
         /* --- Account Creation --- */
         //
@@ -70,28 +62,23 @@ transaction(
         //
         // Fund the new account if specified
         if initialFundingAmount > 0.0 {
-            // Get a vault to fund the new account
-            let fundingProvider = adminAccount.borrow<&FlowToken.Vault{FungibleToken.Provider}>(
-                    from: /storage/flowTokenVault
-                )!
-            // Fund the new account with the initialFundingAmount specified
-            custodialAccount.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
-                .borrow()!
-                .deposit(
-                    from: <-fundingProvider.withdraw(
-                        amount: initialFundingAmount
-                    )
-                )
+            let fundingProvider = adminAccount.storage.borrow<&FlowToken.Vault{FungibleToken.Provider}>(from: /storage/flowTokenVault)
+                ?? panic("Could not borrow FlowToken provider")
+
+            let recipientCap = custodialAccount.capabilities.get<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
+            let recipient = recipientCap.borrow() ?? panic("Could not borrow receiver")
+
+            recipient.deposit(from: <-fundingProvider.withdraw(amount: initialFundingAmount))
         }
 
         /* --- Set up MightyCat.Collection --- */
         //
         // create & save it to the account
-        custodialAccount.save(<-MightyCat.createEmptyCollection(), to: MightyCat.CollectionStoragePath)
+        custodialAccount.storage.save(<-MightyCat.createEmptyCollection(), to: MightyCat.CollectionStoragePath)
 
         // create a public capability for the collection
-        custodialAccount.link<&MightyCat.Collection{NonFungibleToken.CollectionPublic, MightyCat.MightyCatCollectionPublic, MetadataViews.ResolverCollection}>(MightyCat.CollectionPublicPath, target: MightyCat.CollectionStoragePath)
-
+        let collectionCap = custodialAccount.capabilities.storage.issue<&MightyCat.Collection>(MightyCat.CollectionStoragePath)
+        custodialAccount.capabilities.publish(collectionCap, at: MightyCat.CollectionPublicPath)
 
         /* --- Set up User Gameplay --- */
         //

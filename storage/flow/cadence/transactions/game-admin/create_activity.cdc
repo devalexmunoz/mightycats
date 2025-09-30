@@ -16,12 +16,12 @@ transaction(
     // Previous Activity ID before the transaction executes
     let activityIDBefore: UInt64
 
-    prepare(adminAccount: AuthAccount) {
+    prepare(adminAccount: auth(Storage) &Account) {
         // Get the last activity last ID
         self.activityIDBefore = MightyCatsGame.totalActivitiesCreated
 
         // Borrow a reference to the Admin resource in storage
-        self.admin = adminAccount.borrow<&MightyCatsGame.Admin>(from: MightyCatsGame.AdminStoragePath)
+        self.admin = adminAccount.storage.borrow<&MightyCatsGame.Admin>(from: MightyCatsGame.AdminStoragePath)
             ?? panic("Could not borrow a reference to the Admin resource")
 
     }
